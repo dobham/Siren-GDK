@@ -28,3 +28,5 @@ out/production/Siren GDK/com/intellij/uiDesigner/core/SupportCode$TextWithMnemon
 .idea/uiDesigner.xml
 .idea/encodings.xml
 .idea/modules.xml
+src/Testing.java
+src/Testing.form

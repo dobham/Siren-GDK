@@ -1,7 +1,6 @@
 import org.jetbrains.annotations.Contract;
 import processing.core.PApplet;
-
-import java.awt.*;
+import processing.core.PImage;
 
 public class SirenApplication extends PApplet {
     private int y;
@@ -12,17 +11,11 @@ public class SirenApplication extends PApplet {
     private boolean circleOver1, circleOver2, circleOver3, circleOver4, circleOver5, circleOver6, circleOver7, circleOver8;
     private boolean click1, click2, click3, click4, click5, click6, click7, click8;
     private float smoothScale1, smoothScale2, smoothScale3, smoothScale4, smoothScale5, smoothScale6, smoothScale7, smoothScale8;
-    static int MAX;
-    static int GAP;
-    static int DIM;
-    static int RAD;
-    static  int W, H,TXTSZ;
-    static  int BTNC, HOVC;
-    private int TXTC;
-    String label;
-    short xx, yy, xW, yH;
-    boolean isHovering;
-    int page, cx,cy;
+    private boolean randomGenerateOver, manualGenerateOver, backOver;
+    private int buttonDimX, buttonDimY, buttonRandLocX, buttonRandLocY, buttonManLocX, buttonManLocY;
+    private int backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight;
+    private int page;
+    PImage img;
 
     public static void main(String[] args) {
         PApplet.main("SirenApplication", args);
@@ -30,32 +23,56 @@ public class SirenApplication extends PApplet {
 
     public void settings() {
         size(1000, 800);
+        img = loadImage("Images and Textures/LogoRedTransparent.png");
     }
 
     public void setup() {
-         final int MAX = 2, GAP = 50, DIM = 120, RAD = DIM >> 1;
-         page = 0;
-         final int W = 60, H = 40, TXTSZ = 20;
-         final int BTNC = 120, HOVC = 220;
-         final int TXTC = 0;
+        buttonDimX = 300;
+        buttonDimY = 65;
+
+        buttonRandLocX = width/2 - 200;
+        buttonRandLocY = height - 75;
+
+        buttonManLocX = width/2 + 200;
+        buttonManLocY = height - 75;
+
+        backgroundXLoc = width/2;
+        backgroundYLoc = height-115;
+
+        backgroundWidth = width;
+        backgroundHeight = (int)(height/3.5);
+
+        page = 0;
         randSize = width / 8;
         x = (int) random(width);
         y = 25;
         smoothScale1 = smoothScale2 = smoothScale3 = smoothScale4 = smoothScale5 = smoothScale6 = smoothScale7 = smoothScale8 = width / 8;
         ellipseMode(CENTER);
-        cx = width >> 1;
-        cy = height >> 1;
-//        Button("BACK", GAP, height - H - GAP);
+        rectMode(CENTER);
+        noStroke();
     }
 
     public void draw() {
         pageSelector();
     }
 
-    private void page0() {
+    private void pageSelector() {
+        switch (page) {
+            case 0:
+                MainPage();
+                break;
+            case 1:
+                randomGenPage();
+                break;
+            case 2:
+                manualGenPage();
+        }
+    }
+
+    private void MainPage() {
         update();
         background(0);
-        fill(127, 0, 0);
+        fill(202, 0, 5);
         if (click1) {
             for (int i = 0; i < width / 8; i += 1000) {
                 smoothScale1 -= 8;
@@ -108,7 +125,12 @@ public class SirenApplication extends PApplet {
 
         //Possibly add a system where each individual circle that goes above the respawn line is SEPERATLY spawned in
         //Will greatly improve looks
-        Button("NEXT", 100, 100, 100,40, 90, isHovering);
+        image(img, 0,0);
+
+        createBackground(backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight);
+
+        createButton("Random Map Generation", buttonRandLocX, buttonRandLocY, buttonDimX, buttonDimY, randomGenerateOver);
+        createText("Environment Setup",width/2, height/2);
         if (y < (-yDist6 - 100)) {
             x = (int) random(width);
             y = height;
@@ -125,32 +147,101 @@ public class SirenApplication extends PApplet {
         y -= 10;
     }
 
-    public void page1() {
-        fill(120);
-        rect(cx - RAD, GAP * 2 - RAD, DIM, DIM);
+    private void randomGenPage() {
+        background(220);
+    }
+
+    private void manualGenPage() {
+        background(303);
+
+    }
+
+    private void createBackground(int xLoc, int yLoc, int width, int height){
+        fill(202, 0, 5);
+        rect(xLoc, yLoc, width, height);
+    }
+
+    private void createText(String text, int xLoc, int yLoc){
+        textSize(32);
+        text(text, xLoc, yLoc);
+        stroke(255);
+        line(xLoc, yLoc+10, (int)(xLoc+xLoc/1.75), yLoc+10);
     }
 
     private void circleCreate(float x, float y, float randomSize) {
         ellipse((x), (y), randomSize, randomSize);
     }
 
-    public void pageSelector() {
-        switch (page) {
-            case 0:
-                page0();
-                break;
-            case 1:
-                page1();
-        }
+    private void createButton(String label, int xLoc, int yLoc, int xDim, int yDim, boolean hover){
+        fill(hover ? 100 : 150);
+        rect(xLoc, yLoc, xDim, yDim);
+        fill(200);
+        text(label, xLoc-(xDim/2), yLoc);
     }
 
-    public void mouseMoved() {
-        isInside();
+
+    @Contract(pure = true)
+    private boolean mouseOverCircle(int randomSize, int x, int y) {
+        if ((mouseX >= x - randomSize / 2 && mouseX <= x + randomSize / 2) && (mouseY >= y - randomSize / 2 && mouseY <= y + randomSize / 2))
+            return true;
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverButton(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private void update() {
+
+        if(mouseOverButton(buttonRandLocX,buttonRandLocY, buttonDimX, buttonDimY)){
+            randomGenerateOver = true;
+            backOver = manualGenerateOver = false;
+        }
+        else {
+            backOver = manualGenerateOver = randomGenerateOver = false;
+        }
+
+        if (mouseOverCircle(randSize, x, y)) {
+            circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
+            circleOver1 = true;
+        } else if (mouseOverCircle(randSize, xDist1, y + yDist1)) {
+            circleOver1 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
+            circleOver2 = true;
+        } else if (mouseOverCircle(randSize, xDist2, y + yDist2)) {
+            circleOver1 = circleOver2 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
+            circleOver3 = true;
+        } else if (mouseOverCircle(randSize, xDist3, y + yDist3)) {
+            circleOver1 = circleOver2 = circleOver3 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
+            circleOver4 = true;
+        } else if (mouseOverCircle(randSize, x + xDist4, y + yDist4)) {
+            circleOver1 = circleOver2 = circleOver3 = circleOver4 = circleOver6 = circleOver7 = circleOver8 = false;
+            circleOver5 = true;
+        } else if (mouseOverCircle(randSize, x + xDist5, y + yDist5)) {
+            circleOver1 = circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver7 = circleOver8 = false;
+            circleOver6 = true;
+        } else if (mouseOverCircle(randSize, x + xDist6, y + yDist6)) {
+            circleOver1 = circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver8 = false;
+            circleOver7 = true;
+        } else if (mouseOverCircle(randSize, x + xDist7, y + yDist7)) {
+            circleOver1 = circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = false;
+            circleOver8 = true;
+        } else
+            circleOver1 = circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
     }
 
     public void mousePressed() {
-        if (page > 0 && isHovering) --page;
-        else if (page < MAX && isHovering) ++page;
+
+        if (page == 1 && backOver) page = 0;
+        if (page == 2 && backOver) page = 0;
+
+        if (page == 0 && randomGenerateOver) page = 1;
+        else if (page == 0 && manualGenerateOver) page = 2;
+
         if (circleOver1) click1 = true;
         else if (circleOver2) click2 = true;
         else if (circleOver3) click3 = true;
@@ -159,84 +250,10 @@ public class SirenApplication extends PApplet {
         else if (circleOver6) click6 = true;
         else if (circleOver7) click7 = true;
         else if (circleOver8) click8 = true;
-        //else click1 = click2 = click3 = click4 = click5 = click6 = click7 = click8 = false;
     }
 
-    //Annotations Lib
-    @Contract(pure = true)
-    //Annotations Lib
-    private boolean mouseOver(int randomSize, int x, int y) {
-        if ((mouseX >= x - randomSize / 2 && mouseX <= x + randomSize / 2) && (mouseY >= y - randomSize / 2 && mouseY <= y + randomSize / 2))
-            return true;
-        else return false;
-    }
 
-    private void update() {
-        if (mouseOver(randSize, x, y)) {
-            circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
-            circleOver1 = true;
-        } else if (mouseOver(randSize, xDist1, y + yDist1)) {
-            circleOver1 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
-            circleOver2 = true;
-        } else if (mouseOver(randSize, xDist2, y + yDist2)) {
-            circleOver1 = circleOver2 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
-            circleOver3 = true;
-        } else if (mouseOver(randSize, xDist3, y + yDist3)) {
-            circleOver1 = circleOver2 = circleOver3 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
-            circleOver4 = true;
-        } else if (mouseOver(randSize, x + xDist4, y + yDist4)) {
-            circleOver1 = circleOver2 = circleOver3 = circleOver4 = circleOver6 = circleOver7 = circleOver8 = false;
-            circleOver5 = true;
-        } else if (mouseOver(randSize, x + xDist5, y + yDist5)) {
-            circleOver1 = circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver7 = circleOver8 = false;
-            circleOver6 = true;
-        } else if (mouseOver(randSize, x + xDist6, y + yDist6)) {
-            circleOver1 = circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver8 = false;
-            circleOver7 = true;
-        } else if (mouseOver(randSize, x + xDist7, y + yDist7)) {
-            circleOver1 = circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = false;
-            circleOver8 = true;
-        } else
-            circleOver1 = circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
-    }
-    void Button(String txt, int xLoc, int yLoc, int width, int height, int color, boolean hover){
-        label = txt;
-        fill(hover ? 120 : 220);
-        rect(xLoc, yLoc, width, height);
-        fill(color);
-        text(label, xLoc + width / 2, yLoc + height / 2);
-    }
-    boolean isInside() {
-        return isHovering = mouseX > xx && mouseX < xW && mouseY > yy && mouseY < yH;
-    }
+    //    public void mouseMoved() {
+//        isInside();
+//    }
 }
-//class Button extends PApplet {
-//    static final int W = 60, H = 40, TXTSZ = 020;
-//    static final int BTNC = 120, HOVC = 220;
-//    private final int TXTC = 0;
-//
-//    final String label;
-//    final short x, y, xW, yH;
-//
-//    boolean isHovering;
-//
-//    Button(String txt, int xx, int yy) {
-//        label = txt;
-//        x = (short) xx;
-//        y = (short) yy;
-//        xW = (short) (xx + W);
-//        yH = (short) (yy + H);
-//    }
-//
-//    void display() {
-//        fill(isHovering ? 120 : 220);
-//        rect(xx, yy, W, H);
-//
-//        fill(TXTC);
-//        text(label, xx + W / 2, yy + H / 2);
-//    }
-//
-//    boolean isInside() {
-//        return isHovering = mouseX > x && mouseX < xW && mouseY > y && mouseY < yH;
-//    }
-//}

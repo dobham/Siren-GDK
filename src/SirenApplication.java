@@ -11,12 +11,13 @@ public class SirenApplication extends PApplet {
     private boolean circleOver1, circleOver2, circleOver3, circleOver4, circleOver5, circleOver6, circleOver7, circleOver8;
     private boolean click1, click2, click3, click4, click5, click6, click7, click8;
     private float smoothScale1, smoothScale2, smoothScale3, smoothScale4, smoothScale5, smoothScale6, smoothScale7, smoothScale8;
-    private boolean randomGenerateOver, manualGenerateOver, backOver;
+    private boolean randomGenerateOver, manualGenerateOver, backOver, textOver;
     private int buttonDimX, buttonDimY, buttonRandLocX, buttonRandLocY, buttonManLocX, buttonManLocY;
     private int backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight, page;
     private int a = color(0,0,0,175);
     private int b = color(0,0,0,0);
     private PImage img;
+    private int underLineLen =90;
 
     public static void main(String[] args) {
         PApplet.main("SirenApplication", args);
@@ -130,14 +131,36 @@ public class SirenApplication extends PApplet {
 
         //Possibly add a system where each individual circle that goes above the respawn line is SEPERATLY spawned in
         //Will greatly improve looks
-        image(img, 0,0);
+        image(img, 225,50);
 
         setGradient(0,-(backgroundYLoc-(backgroundHeight/2)),width,45,a,b,ShadowGradient.BUTTON_TO_TOP);
 
         createBackground(backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight);
 
         createButton("Random Map Generation", buttonRandLocX, buttonRandLocY, buttonDimX, buttonDimY, randomGenerateOver);
-        createText("Environment Setup",width/2, height/2);
+
+        if(textOver){
+            if (underLineLen <= 375){
+                for (int i = 0; i < 375; i+=50) {
+                    underLineLen += 2;
+                    createText("Environment Setup",90, height-180, 90, underLineLen);
+                }
+            }
+            else{
+                createText("Environment Setup",90, height-180, 90, underLineLen);
+            }
+        } 
+        else {
+            if (underLineLen > 90){
+                for (int i = 0; i < 375; i+=50) {
+                    underLineLen -= 3;
+                    createText("Environment Setup",90, height-180, 90, underLineLen);
+                }
+            }
+            else{
+                createText("Environment Setup",90, height-180);
+            }
+        }
 
         if (y < (-yDist6 - 100)) {
             x = (int) random(width);
@@ -170,11 +193,19 @@ public class SirenApplication extends PApplet {
         rect(xLoc, yLoc, width, height);
     }
 
-    private void createText(String text, int xLoc, int yLoc){
+    private void createText(String text, int xLoc, int yLoc,int start, int end){
+        fill(255);
         textSize(32);
         text(text, xLoc, yLoc);
         stroke(255);
-        line(xLoc, yLoc+10, (int)(xLoc+xLoc/1.75), yLoc+10);
+        line(start, yLoc+10, end, yLoc+10);
+        line(start, yLoc+9, end, yLoc+9);
+    }
+
+    private void createText(String text, int xLoc, int yLoc){
+        fill(255);
+        textSize(32);
+        text(text, xLoc, yLoc);
     }
 
     private void circleCreate(float x, float y, float randomSize) {
@@ -232,7 +263,16 @@ public class SirenApplication extends PApplet {
     }
 
     @Contract(pure = true)
+    private boolean mouseOverText(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+    @Contract(pure = true)
     private void update() {
+
+        if(mouseOverText(90,height-180, 590, 32)){ textOver = true; } else textOver = false;
 
         if(mouseOverButton(buttonRandLocX,buttonRandLocY, buttonDimX, buttonDimY)){
             randomGenerateOver = true;

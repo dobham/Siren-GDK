@@ -13,9 +13,10 @@ public class SirenApplication extends PApplet {
     private float smoothScale1, smoothScale2, smoothScale3, smoothScale4, smoothScale5, smoothScale6, smoothScale7, smoothScale8;
     private boolean randomGenerateOver, manualGenerateOver, backOver;
     private int buttonDimX, buttonDimY, buttonRandLocX, buttonRandLocY, buttonManLocX, buttonManLocY;
-    private int backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight;
-    private int page;
-    PImage img;
+    private int backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight, page;
+    private int a = color(0,0,0,175);
+    private int b = color(0,0,0,0);
+    private PImage img;
 
     public static void main(String[] args) {
         PApplet.main("SirenApplication", args);
@@ -23,10 +24,11 @@ public class SirenApplication extends PApplet {
 
     public void settings() {
         size(1000, 800);
-        img = loadImage("Images and Textures/LogoRedTransparent.png");
+        img = loadImage("Images and Textures/LogoWithText.png");
     }
 
     public void setup() {
+
         buttonDimX = 300;
         buttonDimY = 65;
 
@@ -71,8 +73,11 @@ public class SirenApplication extends PApplet {
 
     private void MainPage() {
         update();
-        background(0);
-        fill(202, 0, 5);
+        background(30);
+        noStroke();
+//        fill(202, 0, 5);
+
+        fill(255);
         if (click1) {
             for (int i = 0; i < width / 8; i += 1000) {
                 smoothScale1 -= 8;
@@ -127,10 +132,13 @@ public class SirenApplication extends PApplet {
         //Will greatly improve looks
         image(img, 0,0);
 
+        setGradient(0,-(backgroundYLoc-(backgroundHeight/2)),width,45,a,b,ShadowGradient.BUTTON_TO_TOP);
+
         createBackground(backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight);
 
         createButton("Random Map Generation", buttonRandLocX, buttonRandLocY, buttonDimX, buttonDimY, randomGenerateOver);
         createText("Environment Setup",width/2, height/2);
+
         if (y < (-yDist6 - 100)) {
             x = (int) random(width);
             y = height;
@@ -149,14 +157,15 @@ public class SirenApplication extends PApplet {
 
     private void randomGenPage() {
         background(220);
+
     }
 
     private void manualGenPage() {
         background(303);
-
     }
 
     private void createBackground(int xLoc, int yLoc, int width, int height){
+//        noStroke();
         fill(202, 0, 5);
         rect(xLoc, yLoc, width, height);
     }
@@ -179,6 +188,33 @@ public class SirenApplication extends PApplet {
         text(label, xLoc-(xDim/2), yLoc);
     }
 
+    public enum ShadowGradient {TOP_TO_BOTTOM, LEFT_TO_RIGHT, BUTTON_TO_TOP};
+
+    private void setGradient(int x, int y, float w, float h, int c1, int c2, ShadowGradient axis ) {
+        noFill();
+        if (axis == ShadowGradient.BUTTON_TO_TOP) {  // BOTTOM TO TOP GRADIENT FOR BOX SHADOWS
+            for (float i = 0, j = y; j <= y+h-1 && i <= 0.8; j++, i+=0.1) {
+                int c = lerpColor(c1,c2, i);
+                stroke(c);
+                line(x, -j, x+w, -j);
+            }
+        } if (axis == ShadowGradient.TOP_TO_BOTTOM) {  // TOP TO BOTTOM GRADIENT FOR BOX SHADOWS
+            for (int i = y; i <= y+h-1; i++) {
+                float inter = map(i, y, y+h, 0, 1);
+                int c = lerpColor(c1, c2, inter);
+                stroke(c);
+                line(x, i, x+w, i);
+            }
+        } else if (axis == ShadowGradient.LEFT_TO_RIGHT) {  // LEFT TO RIGHT GRADIENT FOR BOX SHADOWS
+            for (int i = (int) (x+w); i > x +1; i--) {
+                float inter = map(i, x, x+w, 0, 1);
+                int c = lerpColor(c1, c2, inter);
+                stroke(c);
+                line(i, y, i, y+h);
+            }
+        }
+        noStroke();
+    }
 
     @Contract(pure = true)
     private boolean mouseOverCircle(int randomSize, int x, int y) {

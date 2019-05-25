@@ -4,4 +4,6 @@
 //  - CREATE BUTTON SLIDER (Optional)
 //  - ADD LOGO (Completed)
 //  - CREATE RANDOM MAP PAGE (In-Progress)
-//  - CREATE MANUAL MAP PAGE (In-Progress)
+//      -PREVIEW PAGE?
+//  - CREATE MANUAL MAP PAGE, SELECTOR (In-Progress)
+//      -PREVIEW PAGE/MAKER

@@ -20,15 +20,15 @@ public class SirenApplication extends PApplet {
     private int b = color(0,0,0,0);
     private PImage img;
     private int underLineLen =90;
-    private int underLineLenButtonRand = 600;
-    private int underLineLenButtonMan = 900;
+    private int underLineLenButtonRand;
+    private int underLineLenButtonMan;
 
     public static void main(String[] args) {
         PApplet.main("SirenApplication", args);
     }
 
     public void settings() {
-        size(1000, 800);
+        fullScreen();
         img = loadImage("Images and Textures/LogoWithText.png");
     }
 
@@ -37,19 +37,22 @@ public class SirenApplication extends PApplet {
         buttonRandDimX = 385;
         buttonDimY = 50;
 
-        buttonRandLocX = width/2 - 200;
-        buttonRandLocY = height - 75;
+        buttonRandLocX = width/3;
+        buttonRandLocY = height - 90;
 
-        buttonManDimX = 410;
+        buttonManDimX = 520;
 
-        buttonManLocX = width/2 + 200;
-        buttonManLocY = height - 75;
+        buttonManLocX = width/2 + width/5;
+        buttonManLocY = height - 90;
 
         backgroundXLoc = width/2;
         backgroundYLoc = height-115;
 
         backgroundWidth = width;
         backgroundHeight = (int)(height/3.5);
+
+        underLineLenButtonRand = buttonRandLocX - buttonRandDimX/2;
+        underLineLenButtonMan = buttonManLocX - buttonManDimX/2;
 
         page = 0;
         randSize = width / 8;
@@ -143,71 +146,77 @@ public class SirenApplication extends PApplet {
 
         createBackground(backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight);
         if(randomGenerateOver){
-            if(underLineLenButtonRand <= 600){
-                for (int i = 0; i < 600; i+=50) {
+            if(underLineLenButtonRand <= buttonRandLocX + buttonRandDimX/2){
+                for (int i = 0; i < buttonRandLocX + buttonRandDimX/2; i+=50) {
                     underLineLenButtonRand +=2;
-                    createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX, underLineLenButtonRand);
+                    createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX - buttonRandDimX/2, underLineLenButtonRand);
                 }
             }
-            else createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX, underLineLenButtonRand);
+            else createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX - buttonRandDimX/2, underLineLenButtonRand);
         }
         else {
-            if (underLineLenButtonRand > 600){
-                for (int i = 0; i < 220; i+=50) {
+            if (underLineLenButtonRand > buttonRandLocX + buttonRandDimX/2){
+                for (int i = 0; i < buttonRandLocX + buttonRandDimX/2; i+=50) {
                     underLineLenButtonRand-=2;
-                    createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX, underLineLenButtonRand);
+                    createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX - buttonRandDimX/2, underLineLenButtonRand);
                 }
             }
-            else createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver);
+            else {
+                createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver);
+                underLineLenButtonRand = 300;
+            }
         }
         if (manualGenerateOver){
-            if(underLineLenButtonMan <= 900){
-                for (int i = 0; i < 900; i+=50) {
+            if(underLineLenButtonMan <= buttonManLocX + buttonManDimX/2){
+                for (int i = 0; i < buttonManLocX + buttonManDimX/2; i+=50) {
                     underLineLenButtonMan+=2;
-                    createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX, underLineLenButtonMan);
+                    createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX - buttonManDimX/2, underLineLenButtonMan);
                 }
             }
-            else createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX, underLineLenButtonMan);
+            else createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX - buttonManDimX/2, underLineLenButtonMan);
         }
         else {
-            if (underLineLenButtonMan > 900){
-                for (int i = 0; i < 900; i+=50) {
+            if (underLineLenButtonMan > buttonManLocX + buttonManDimX/2){
+                for (int i = 0; i < buttonManLocX + buttonManDimX/2; i+=50) {
                     underLineLenButtonMan-=2;
-                    createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX, underLineLenButtonMan);
+                    createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX - buttonManDimX/2, underLineLenButtonMan);
                 }
             }
-            else createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver);
+            else {
+                createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver);
+                underLineLenButtonMan = 600;
+            }
         }
 
         if(textOver){
             if (underLineLen <= 375){
                 for (int i = 0; i < 375; i+=50) {
                     underLineLen += 2;
-                    createText("Environment Setup",90, height-180, 90, underLineLen);
+                    createText("Environment Setup",90, height-200, 90, underLineLen);
                 }
             }
-            else createText("Environment Setup",90, height-180, 90, underLineLen);
+            else createText("Environment Setup",90, height-200, 90, underLineLen);
         }
         else {
             if (underLineLen > 90){
                 for (int i = 0; i < 375; i+=50) {
                     underLineLen -= 3;
-                    createText("Environment Setup",90, height-180, 90, underLineLen);
+                    createText("Environment Setup",90, height-200, 90, underLineLen);
                 }
             }
-            else createText("Environment Setup",90, height-180);
+            else createText("Environment Setup",90, height-200);
         }
 
-        if (y < (-yDist6 - 100)) {
+        if (y < (-yDist7 - 100)) {
             x = (int) random(width);
             y = height;
-            yDist1 = xDist1 = (int) (50 + random(100));
-            yDist2 = xDist2 = (int) (150 + random(200));
-            yDist3 = xDist3 = (int) (250 + random(300));
-            yDist4 = xDist4 = (int) (350 + random(400));
-            yDist5 = xDist5 = (int) (450 + random(300));
-            yDist6 = xDist6 = (int) (550 + random(200));
-            yDist7 = xDist7 = (int) (650 + random(100));
+            yDist1 = xDist1 = (int) (width - random(width));
+            yDist2 = xDist2 = (int) (width - random(width));
+            yDist3 = xDist3 = (int) (width - random(width));
+            yDist4 = xDist4 = (int) (width - random(width));
+            yDist5 = xDist5 = (int) (width - random(width));
+            yDist6 = xDist6 = (int) (width - random(width));
+            yDist7 = xDist7 = (int) (width - random(height))+100;
             click1 = click2 = click3 = click4 = click5 = click6 = click7 = click8 = false;
             smoothScale1 = smoothScale2 = smoothScale3 = smoothScale4 = smoothScale5 = smoothScale6 = smoothScale7 = smoothScale8 = width / 8;
         }
@@ -231,7 +240,7 @@ public class SirenApplication extends PApplet {
 
     private void createText(String text, int xLoc, int yLoc,int start, int end){
         fill(255);
-        textSize(32);
+        textSize(40);
         text(text, xLoc, yLoc);
         stroke(255);
         line(start, yLoc+10, end, yLoc+10);
@@ -240,7 +249,7 @@ public class SirenApplication extends PApplet {
 
     private void createText(String text, int xLoc, int yLoc){
         fill(255);
-        textSize(32);
+        textSize(40);
         text(text, xLoc, yLoc);
     }
 
@@ -263,8 +272,8 @@ public class SirenApplication extends PApplet {
         fill(200);
         text(label, xLoc-(xDim/2), yLoc+yDim/4);
         stroke(255);
-        line(start, yLoc+10, end, yLoc+10);
-        line(start, yLoc+9, end, yLoc+9);
+        line(start, yLoc+15, end, yLoc+15);
+        line(start, yLoc+14, end, yLoc+14);
     }
 
     public enum ShadowGradient {TOP_TO_BOTTOM, LEFT_TO_RIGHT, BUTTON_TO_TOP};
@@ -325,9 +334,9 @@ public class SirenApplication extends PApplet {
         }
         else return false;
     }
+
     @Contract(pure = true)
     private void update() {
-
         if(mouseOverText(90,height-180, 590, 32)){ textOver = true; } else textOver = false;
 
         if(mouseOverButtonRand(buttonRandLocX,buttonRandLocY, buttonRandDimX, buttonDimY)){
@@ -385,9 +394,4 @@ public class SirenApplication extends PApplet {
         else if (circleOver7) click7 = true;
         else if (circleOver8) click8 = true;
     }
-
-
-    //    public void mouseMoved() {
-//        isInside();
-//    }
 }

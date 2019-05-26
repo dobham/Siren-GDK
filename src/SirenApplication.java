@@ -23,7 +23,7 @@ public class SirenApplication extends PApplet {
     private int underLineLenButtonRand;
     private int underLineLenButtonMan;
     public int scale = 50;
-    public boolean squareSelected, horizontalSelected, verticalSelected, diagonalSelected, freedrawSelected;
+    public boolean squareSelected, horizontalSelected, verticalSelected, diagonalSelected1, diagonalSelected2, freedrawSelected, spawnSelected;
 
 
     public static void main(String[] args) {
@@ -586,6 +586,27 @@ public class SirenApplication extends PApplet {
     }
 
     public void mousePressed() {
+        if(squareCreateOver){
+            squareSelected = !squareSelected;
+        }
+        else if(horizontalOver){
+            horizontalSelected = !horizontalSelected;
+        }
+        else if(verticalOver){
+            verticalSelected = !verticalSelected;
+        }
+        else if(diagonalOver1){
+            diagonalSelected1 = !diagonalSelected1;
+        }
+        else if(diagonalOver2){
+            diagonalSelected2 = !diagonalSelected2;
+        }
+        else if(freedrawOver){
+            freedrawSelected = !freedrawSelected;
+        }
+        else if(spawnOver){
+            spawnSelected = !spawnSelected;
+        } /*else spawnSelected = freedrawSelected = diagonalSelected2 = diagonalSelected1 = verticalSelected = horizontalSelected = squareSelected = false;*/
 
         if (page == 1 && backOver) page = 0;
         if (page == 2 && backOver) page = 0;

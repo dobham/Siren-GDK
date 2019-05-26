@@ -1,4 +1,5 @@
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -9,19 +10,20 @@ public class SirenApplication extends PApplet {
     private int x;
     private int randSize;
     private int yDist1, xDist1, yDist2, xDist2, yDist3, xDist3, yDist4, xDist4, yDist5, xDist5, yDist6, xDist6, yDist7, xDist7;
-    private boolean isOver;
     private boolean circleOver1, circleOver2, circleOver3, circleOver4, circleOver5, circleOver6, circleOver7, circleOver8;
     private boolean click1, click2, click3, click4, click5, click6, click7, click8;
     private float smoothScale1, smoothScale2, smoothScale3, smoothScale4, smoothScale5, smoothScale6, smoothScale7, smoothScale8;
-    private boolean randomGenerateOver, manualGenerateOver, backOver, textOver;
-    private int buttonRandDimX, buttonManDimX, buttonDimY, buttonRandLocX, buttonRandLocY, buttonManLocX, buttonManLocY;
+    private boolean randomGenerateOver, manualGenerateOver, backOver, textOver, squareCreateOver, freedrawOver, saveOver, launchOver, horizontalOver, verticalOver, diagonalOver1, diagonalOver2, spawnOver;
+    private int buttonRandDimX, buttonManDimX, buttonDimY, buttonRandLocX, buttonRandLocY, buttonManLocX, buttonManLocY, shapeButtonWidth, shapeButtonHeight, shapeButtonLocY;
     private int backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight, taskBarXLoc, taskBarYLoc, taskBarHeight, taskBarWidth, page;
     private int a = color(0,0,0,175);
     private int b = color(0,0,0,0);
     private PImage img;
-    private int underLineLen =90;
+    private int underLineLen = 90;
     private int underLineLenButtonRand;
     private int underLineLenButtonMan;
+    public int scale = 50;
+    public boolean squareSelected, horizontalSelected, verticalSelected, diagonalSelected, freedrawSelected;
 
 
     public static void main(String[] args) {
@@ -37,6 +39,11 @@ public class SirenApplication extends PApplet {
     public void setup() {
         PImage icon = loadImage("Images and Textures/LogoWithText.png");
         surface.setIcon(icon);
+
+        shapeButtonWidth = 100;
+        shapeButtonHeight = 35;
+
+        shapeButtonLocY = height - 50;
 
         buttonRandDimX = 385;
         buttonDimY = 50;
@@ -236,7 +243,16 @@ public class SirenApplication extends PApplet {
     private void randomGenPage() {
         background(30);
         createBackground(taskBarXLoc, taskBarYLoc, taskBarWidth, taskBarHeight);
-
+        createShapeButton("Back",200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
+        createShapeButton(510, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, squareCreateOver, "Square");
+        createShapeButton(610, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, horizontalOver, "Horizontal");
+        createShapeButton(710, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, verticalOver, "Vertical");
+        createShapeButton(810, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, diagonalOver1, "Diagonal1");
+        createShapeButton(950, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, diagonalOver2, "Diagonal2");
+        createShapeButton("Free Draw" , 1200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, freedrawOver, "Curve");
+        createShapeButton("Set Spawn" , 1270, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, spawnOver, "Square");
+        createShapeButton("Save",   1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, saveOver);
+        createShapeButton("Launch Game",  1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, launchOver);
     }
 
     private void manualGenPage() {
@@ -274,6 +290,7 @@ public class SirenApplication extends PApplet {
         fill(hover ? color(220,0,5) : color(202,0,5));
         rect(xLoc, yLoc, xDim, yDim);
         fill(200);
+        textSize(40);
         text(label, xLoc-(xDim/2), yLoc+yDim/4);
     }
 
@@ -282,10 +299,71 @@ public class SirenApplication extends PApplet {
         fill(hover ? color(220,0,5) : color(202,0,5));
         rect(xLoc, yLoc, xDim, yDim);
         fill(200);
+        textSize(40);
         text(label, xLoc-(xDim/2), yLoc+yDim/4);
         stroke(255);
         line(start, yLoc+15, end, yLoc+15);
         line(start, yLoc+14, end, yLoc+14);
+    }
+
+    private void createShapeButton(String label, int xLoc, int yLoc, int xDim, int yDim, boolean hover){
+        noStroke();
+        fill(hover ? color(220,0,5) : color(202,0,5));
+        rect(xLoc, yLoc, xDim, yDim);
+        fill(200);
+        textSize(40);
+        text(label, xLoc-(xDim/2), yLoc+yDim/4);
+    }
+
+    private void createShapeButton(String label, int xLoc, int yLoc, int xDim, int yDim, boolean hover, @NotNull String shape){
+        noStroke();
+        fill(hover ? color(220,0,5) : color(202,0,5));
+        rect(xLoc, yLoc, xDim, yDim);
+        fill(200);
+        textSize(20);
+        if(shape.equals("Curve")){
+            text(label, xLoc-((int)(xDim * 1.5)), yLoc+yDim/4);
+            noFill();
+            stroke(255);
+            curve(xLoc*2, yLoc-90, xLoc - xDim/2, yLoc-50, xLoc, yLoc, xLoc + xDim*2, yLoc);
+        }
+        if(shape.equals("Square")){
+            textSize(20);
+            text(label, xLoc-(xDim/2), yLoc+yDim/2);
+            fill(240,230,140);
+            rect(xLoc, yLoc-yDim/2 - 8, 50,50);
+        }
+    }
+
+    private void createShapeButton(int xLoc, int yLoc, int xDim, int yDim, boolean hover, @NotNull String shape){
+        noStroke();
+        fill(hover ? color(220,0,5) : color(202,0,5));
+        rect(xLoc, yLoc, xDim, yDim);
+        if(shape.equals("Square")){
+            fill(255);
+            stroke(255);
+            rect(xLoc, yLoc-5, 50,50);
+        }
+        if(shape.equals("Horizontal")){
+            stroke(255);
+            strokeWeight(4);
+            line(xLoc - xDim/2, yLoc-5, xLoc + xDim/2, yLoc-5);
+        }
+        if(shape.equals("Vertical")){
+            stroke(255);
+            strokeWeight(4);
+            line(xLoc, (yLoc-5) - yDim/2, xLoc, (yLoc-5) + yDim/2);
+        }
+        if(shape.equals("Diagonal1")){
+            stroke(255);
+            strokeWeight(4);
+            line(xLoc - xDim/2, (yLoc-5) - yDim/2, xLoc + xDim/2, (yLoc-5) + yDim/2);
+        }
+        if(shape.equals("Diagonal2")){
+            stroke(255);
+            strokeWeight(4);
+            line(xLoc - xDim/2, (yLoc-5) + yDim/2, xLoc + xDim/2, (yLoc-5) - yDim/2);
+        }
     }
 
     public enum ShadowGradient {TOP_TO_BOTTOM, LEFT_TO_RIGHT, BUTTON_TO_TOP};
@@ -348,7 +426,118 @@ public class SirenApplication extends PApplet {
     }
 
     @Contract(pure = true)
+    private boolean mouseOverBack(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverSquare(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverHorizontal(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverVertical(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverDiagonal1(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverDiagonal2(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverFreedraw(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverSave(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverLaunch(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverSpawnSet(int locX, int locY, int dimX, int dimY) {
+        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
+            return true;
+        }
+        else return false;
+    }
+
+    @Contract(pure = true)
     private void update() {
+
+        if(mouseOverSpawnSet(1270, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+            spawnOver = true;
+            squareCreateOver = freedrawOver= saveOver= launchOver= horizontalOver= verticalOver= diagonalOver1 = diagonalOver2 = false ;
+        } else if (mouseOverLaunch(1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+            launchOver = true;
+            squareCreateOver = freedrawOver= saveOver= spawnOver= horizontalOver= verticalOver= diagonalOver1 = diagonalOver2 = false;
+        } else if (mouseOverSave(1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+            saveOver = true;
+            squareCreateOver = freedrawOver= launchOver= spawnOver= horizontalOver= verticalOver= diagonalOver1 = diagonalOver2 = false;
+        } else if (mouseOverFreedraw(1200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+            freedrawOver = true;
+            squareCreateOver = launchOver= saveOver= spawnOver= horizontalOver= verticalOver= diagonalOver1 = diagonalOver2 = false;
+        } else if (mouseOverDiagonal1(810, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+             diagonalOver1 = true;
+             launchOver = squareCreateOver = freedrawOver= saveOver= spawnOver= horizontalOver= verticalOver= diagonalOver2 = false;
+        } else if (mouseOverDiagonal2(950, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+            diagonalOver2 = true;
+            squareCreateOver = freedrawOver= saveOver= spawnOver= horizontalOver= verticalOver= launchOver = diagonalOver1 = false;
+        } else if (mouseOverVertical(710, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+            verticalOver = true;
+            squareCreateOver = freedrawOver= saveOver= spawnOver= horizontalOver= launchOver= diagonalOver1 = diagonalOver2 = false;
+        } else if (mouseOverHorizontal(610, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+            horizontalOver = true;
+            squareCreateOver = freedrawOver= saveOver= spawnOver= launchOver= verticalOver= diagonalOver1 = diagonalOver2 = false;
+        } else if (mouseOverSquare(510, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+            squareCreateOver = true;
+            launchOver = freedrawOver= saveOver= spawnOver= horizontalOver= verticalOver= diagonalOver1 = diagonalOver2 = false;
+        }
+
+
         if(mouseOverText(90,height-180, 590, 32)){ textOver = true; } else textOver = false;
 
         if(mouseOverButtonRand(buttonRandLocX,buttonRandLocY, buttonRandDimX, buttonDimY)){
@@ -357,6 +546,9 @@ public class SirenApplication extends PApplet {
         } else if(mouseOverButtonMan(buttonManLocX,buttonManLocY, buttonManDimX, buttonDimY)) {
             manualGenerateOver = true;
             backOver = randomGenerateOver = false;
+        } else if(mouseOverBack(200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+            backOver = true;
+            manualGenerateOver = randomGenerateOver = false;
         } else {
             backOver = manualGenerateOver = randomGenerateOver = false;
         }

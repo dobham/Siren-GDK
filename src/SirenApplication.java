@@ -15,13 +15,14 @@ public class SirenApplication extends PApplet {
     private float smoothScale1, smoothScale2, smoothScale3, smoothScale4, smoothScale5, smoothScale6, smoothScale7, smoothScale8;
     private boolean randomGenerateOver, manualGenerateOver, backOver, textOver;
     private int buttonRandDimX, buttonManDimX, buttonDimY, buttonRandLocX, buttonRandLocY, buttonManLocX, buttonManLocY;
-    private int backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight, page;
+    private int backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight, taskBarXLoc, taskBarYLoc, taskBarHeight, taskBarWidth, page;
     private int a = color(0,0,0,175);
     private int b = color(0,0,0,0);
     private PImage img;
     private int underLineLen =90;
     private int underLineLenButtonRand;
     private int underLineLenButtonMan;
+
 
     public static void main(String[] args) {
         PApplet.main("SirenApplication", args);
@@ -30,9 +31,12 @@ public class SirenApplication extends PApplet {
     public void settings() {
         fullScreen();
         img = loadImage("Images and Textures/LogoWithText.png");
+
     }
 
     public void setup() {
+        PImage icon = loadImage("Images and Textures/LogoWithText.png");
+        surface.setIcon(icon);
 
         buttonRandDimX = 385;
         buttonDimY = 50;
@@ -53,6 +57,12 @@ public class SirenApplication extends PApplet {
 
         underLineLenButtonRand = buttonRandLocX - buttonRandDimX/2;
         underLineLenButtonMan = buttonManLocX - buttonManDimX/2;
+
+        taskBarXLoc = width/2;
+        taskBarYLoc = height-height/20;
+
+        taskBarHeight =(height/10);
+        taskBarWidth = width;
 
         page = 0;
         randSize = width / 8;
@@ -224,12 +234,14 @@ public class SirenApplication extends PApplet {
     }
 
     private void randomGenPage() {
-        background(220);
+        background(30);
+        createBackground(taskBarXLoc, taskBarYLoc, taskBarWidth, taskBarHeight);
 
     }
 
     private void manualGenPage() {
-        background(303);
+        background(30);
+        createBackground(taskBarXLoc, taskBarYLoc, taskBarWidth, taskBarHeight);
     }
 
     private void createBackground(int xLoc, int yLoc, int width, int height){

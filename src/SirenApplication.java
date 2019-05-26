@@ -2,6 +2,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.event.MouseEvent;
 
 import java.awt.*;
 
@@ -243,6 +244,7 @@ public class SirenApplication extends PApplet {
     private void randomGenPage() {
         update();
         background(30);
+//        noStroke();
         createBackground(taskBarXLoc, taskBarYLoc, taskBarWidth, taskBarHeight);
         createShapeButton("Back",200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
         createShapeButton(510, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, squareCreateOver, "Square");
@@ -254,6 +256,30 @@ public class SirenApplication extends PApplet {
         createShapeButton("Set Spawn" , 1270, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, spawnOver, "Square");
         createShapeButton("Save",   1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, saveOver);
         createShapeButton("Launch Game",  1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, launchOver);
+
+        if(squareSelected){
+            stroke(255);
+            rect(mouseX, mouseY, scale, scale);
+        }
+        if(horizontalSelected){
+            stroke(255);
+            line(mouseX - scale/2, mouseY, mouseX + scale/2, mouseY);
+        }
+        if(verticalSelected){
+            stroke(255);
+            line(mouseX, mouseY + scale/2, mouseX, mouseY - scale/2);
+        }
+        if(diagonalSelected1){
+            stroke(255);
+            line(mouseX - scale/2, mouseY - scale/2, mouseX + scale/2, mouseY + scale/2);
+        }
+        if(diagonalSelected2){
+            stroke(255);
+            line(mouseX - scale/2, mouseY + scale/2, mouseX + scale/2, mouseY - scale/2);
+        }
+        if(freedrawSelected){
+            cursor(CROSS);
+        }
     }
 
     private void manualGenPage() {
@@ -509,7 +535,6 @@ public class SirenApplication extends PApplet {
 
     @Contract(pure = true)
     private void update() {
-
         if(mouseOverSpawnSet(1270, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
             spawnOver = true;
             squareCreateOver = freedrawOver= saveOver= launchOver= horizontalOver= verticalOver= diagonalOver1 = diagonalOver2 = false;
@@ -588,24 +613,31 @@ public class SirenApplication extends PApplet {
     public void mousePressed() {
         if(squareCreateOver){
             squareSelected = !squareSelected;
+            scale = 50;
         }
         else if(horizontalOver){
             horizontalSelected = !horizontalSelected;
+            scale = 50;
         }
         else if(verticalOver){
             verticalSelected = !verticalSelected;
+            scale = 50;
         }
         else if(diagonalOver1){
             diagonalSelected1 = !diagonalSelected1;
+            scale = 50;
         }
         else if(diagonalOver2){
             diagonalSelected2 = !diagonalSelected2;
+            scale = 50;
         }
         else if(freedrawOver){
             freedrawSelected = !freedrawSelected;
+            scale = 50;
         }
         else if(spawnOver){
             spawnSelected = !spawnSelected;
+            scale = 50;
         } /*else spawnSelected = freedrawSelected = diagonalSelected2 = diagonalSelected1 = verticalSelected = horizontalSelected = squareSelected = false;*/
 
         if (page == 1 && backOver) page = 0;
@@ -622,5 +654,11 @@ public class SirenApplication extends PApplet {
         else if (circleOver6) click6 = true;
         else if (circleOver7) click7 = true;
         else if (circleOver8) click8 = true;
+    }
+
+    public void mouseWheel(@NotNull MouseEvent event){
+        if(event.getCount() == -1){
+            scale += 5;
+        } else scale -= 5;
     }
 }

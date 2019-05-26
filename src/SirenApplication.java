@@ -241,6 +241,7 @@ public class SirenApplication extends PApplet {
     }
 
     private void randomGenPage() {
+        update();
         background(30);
         createBackground(taskBarXLoc, taskBarYLoc, taskBarWidth, taskBarHeight);
         createShapeButton("Back",200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
@@ -505,12 +506,13 @@ public class SirenApplication extends PApplet {
         else return false;
     }
 
+
     @Contract(pure = true)
     private void update() {
 
         if(mouseOverSpawnSet(1270, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
             spawnOver = true;
-            squareCreateOver = freedrawOver= saveOver= launchOver= horizontalOver= verticalOver= diagonalOver1 = diagonalOver2 = false ;
+            squareCreateOver = freedrawOver= saveOver= launchOver= horizontalOver= verticalOver= diagonalOver1 = diagonalOver2 = false;
         } else if (mouseOverLaunch(1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
             launchOver = true;
             squareCreateOver = freedrawOver= saveOver= spawnOver= horizontalOver= verticalOver= diagonalOver1 = diagonalOver2 = false;
@@ -535,6 +537,8 @@ public class SirenApplication extends PApplet {
         } else if (mouseOverSquare(510, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
             squareCreateOver = true;
             launchOver = freedrawOver= saveOver= spawnOver= horizontalOver= verticalOver= diagonalOver1 = diagonalOver2 = false;
+        } else {
+            squareCreateOver = launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = false;
         }
 
 

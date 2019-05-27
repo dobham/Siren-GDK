@@ -8,12 +8,12 @@
 //      -IMAGE CONVERSION
 //          -LINE-POINT INTERSECTION SYSTEM
 //  - CREATE MANUAL MAP PAGE, SELECTOR (In-Progress)
-//      -PREVIEW PAGE/MAKER
-//      -HORIZONTAL LINE
-//      -VERTICAL LINE
-//      -SQUARE
+//      -PREVIEW PAGE/MAKER (Completed)
+//      -HORIZONTAL LINE (Completed)
+//      -VERTICAL LINE (Completed)
+//      -SQUARE (Completed)
 //      -TRIANGLE (Optional)
-//      -SCALING
+//      -SCALING (Completed)
 //      -CIRCLE (Optional)
 //      -ERASE (Is it even possible?)
 //      -FREE DRAW TOOL
@@ -21,5 +21,5 @@
 
 
 // TODO
-//  -Get all buttons for manual creation page completed
-//      -Back button, square, horizontal line, vertical line, diagonal (optional), triangle (optional), cirlce (optional), freedraw, spawn location, save, launch game
+//  -Get all buttons for manual creation page completed (Completed)
+//      -Back button, square, horizontal line, vertical line, diagonal (optional), triangle (optional), cirlce (optional), freedraw, spawn location, save, launch game (Completed)

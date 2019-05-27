@@ -104,7 +104,6 @@ public class SirenApplication extends PApplet {
         background(30);
         noStroke();
 //        fill(202, 0, 5);
-
         fill(255);
         if (click1) {
             for (int i = 0; i < width / 8; i += 1000) {
@@ -240,11 +239,10 @@ public class SirenApplication extends PApplet {
         }
         y -= 10;
     }
-
     private void randomGenPage() {
         update();
-        background(30);
 //        noStroke();
+        background(30);
         createBackground(taskBarXLoc, taskBarYLoc, taskBarWidth, taskBarHeight);
         createShapeButton("Back",200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
         createShapeButton(510, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, squareCreateOver, "Square");
@@ -256,7 +254,6 @@ public class SirenApplication extends PApplet {
         createShapeButton("Set Spawn" , 1270, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, spawnOver, "Square");
         createShapeButton("Save",   1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, saveOver);
         createShapeButton("Launch Game",  1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, launchOver);
-
         if(squareSelected){
             stroke(255);
             rect(mouseX, mouseY, scale, scale);
@@ -654,6 +651,16 @@ public class SirenApplication extends PApplet {
         else if (circleOver6) click6 = true;
         else if (circleOver7) click7 = true;
         else if (circleOver8) click8 = true;
+
+//        if(squareSelected){
+//            int x1 = 100 - scale/2;
+//            int y1 = 50 + scale/2;
+//
+//            int x2 = 200 + scale/2;
+//            int y2 = 50 - scale/2;
+//
+//            line(x1, y1, x2, y2);
+//        }
     }
 
     public void mouseWheel(@NotNull MouseEvent event){

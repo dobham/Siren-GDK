@@ -6,6 +6,7 @@ import processing.event.MouseEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SirenApplication extends PApplet {
     private int y;
@@ -260,95 +261,60 @@ public class SirenApplication extends PApplet {
         createShapeButton("Save",   1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, saveOver);
         createShapeButton("Launch Game",  1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, launchOver);
 
-        for(lineWallCollider colliders : lineColliders){
-            colliders.showBoundary();
+//        lineColliders.add(new lineWallCollider(10,20,50,50));
+//        squareCollidersFill.add(new squareColliders(10,20,10,20,50,50,25,25));
+//        squareCollidersNoFill.add(new squareColliders(50,100,50,100,100,100,50,50));
+//        lineColliders.add(new lineWallCollider(10,20,50,50));
+//        squareCollidersFill.add(new squareColliders(10,20,10,20,50,50,25,25));
+//        squareCollidersNoFill.add(new squareColliders(50,100,50,100,100,100,50,50));
+//        lineColliders.add(new lineWallCollider(10,20,50,50));
+//        squareCollidersFill.add(new squareColliders(10,20,10,20,50,50,25,25));
+//        squareCollidersNoFill.add(new squareColliders(50,100,50,100,100,100,50,50));
+//        lineColliders.add(new lineWallCollider(10,20,50,50));
+//        squareCollidersFill.add(new squareColliders(10,20,10,20,50,50,25,25));
+//        squareCollidersNoFill.add(new squareColliders(50,100,50,100,100,100,50,50));
+//        lineColliders.add(new lineWallCollider(10,20,50,50));
+//        squareCollidersFill.add(new squareColliders(10,20,10,20,50,50,25,25));
+//        squareCollidersNoFill.add(new squareColliders(50,100,50,100,100,100,50,50));
+
+        if (!(lineColliders.isEmpty())){
+            for(lineWallCollider lineColliders : lineColliders){
+                lineColliders.showBoundary();
+            }
         }
-        for(squareColliders colliders : squareCollidersFill){
-            colliders.squareFill();
-        }
-        for(squareColliders colliders : squareCollidersNoFill){
-            colliders.squareNoFill();
+//        if (!(squareCollidersFill.isEmpty())){
+//            for(squareColliders squareColliders : squareCollidersFill){
+//                squareColliders.squareFill();
+//            }
+//        }
+        if (!(squareCollidersNoFill.isEmpty())){
+            for(squareColliders squareColliders : squareCollidersNoFill){
+                squareColliders.squareNoFill();
+            }
         }
 
         if(squareSelected){
             stroke(255);
             rect(mouseX, mouseY, scale, scale);
-            if (mousePressed && (mouseButton == LEFT)){    // FILL
-                int x1 = mouseX - (scale >> 1);
-                int x2 = mouseX + (scale >> 1);
-                int x3 = mouseX - (scale >> 1);
-                int x4 = mouseX + (scale >> 1);
-                int y1 = mouseY + (scale >> 1);
-                int y2 = mouseY + (scale >> 1);
-                int y3 = mouseY - (scale >> 1);
-                int y4 = mouseY - (scale >> 1);
-                squareCollidersFill.add(new squareColliders(x1,x2,x3,x4,y1,y2,y3,y4));
-            }
-            if (mousePressed && (mouseButton == RIGHT)){  //NO FILL
-                int x1 = mouseX - (scale >> 1);
-                int x2 = mouseX + (scale >> 1);
-                int x3 = mouseX - (scale >> 1);
-                int x4 = mouseX + (scale >> 1);
-                int y1 = mouseY + (scale >> 1);
-                int y2 = mouseY + (scale >> 1);
-                int y3 = mouseY - (scale >> 1);
-                int y4 = mouseY - (scale >> 1);
-                squareCollidersNoFill.add(new squareColliders(x1,x2,x3,x4,y1,y2,y3,y4));
-            }
         }
-        if(horizontalSelected){
+         if(horizontalSelected){
             stroke(255);
             line(mouseX - (scale >> 1), mouseY, mouseX + (scale >> 1), mouseY);
-            if(mousePressed){
-                int x1 = mouseX - (scale >> 1);
-                int x2 = mouseX + (scale >> 1);
-                int y1 = mouseY;
-                int y2 = mouseY;
-                lineColliders.add(new lineWallCollider(x1, x2, y1, y2));
-            }
         }
-        if(verticalSelected){
+         if(verticalSelected){
             stroke(255);
             line(mouseX, mouseY + (scale >> 1), mouseX, mouseY - (scale >> 1));
-            if(mousePressed){
-                int x1 = mouseX;
-                int x2 = mouseX;
-                int y1 = mouseY + (scale >> 1);
-                int y2 = mouseY - (scale >> 1);
-                lineColliders.add(new lineWallCollider(x1, x2, y1, y2));
-            }
         }
-        if(diagonalSelected1){
+         if(diagonalSelected1){
             stroke(255);
             line(mouseX - (scale >> 1), mouseY - (scale >> 1), mouseX + (scale >> 1), mouseY + (scale >> 1));
-            if(mousePressed){
-                int x1 = mouseX - (scale >> 1);
-                int x2 = mouseX + (scale >> 1);
-                int y1 = mouseY - (scale >> 1);
-                int y2 = mouseY + (scale >> 1);
-                lineColliders.add(new lineWallCollider(x1, x2, y1, y2));
-            }
         }
-        if(diagonalSelected2){
+         if(diagonalSelected2){
             stroke(255);
             line(mouseX - (scale >> 1), mouseY + (scale >> 1), mouseX + (scale >> 1), mouseY - (scale >> 1));
-            if(mousePressed){
-                int x1 = mouseX - (scale >> 1);
-                int x2 = mouseX + (scale >> 1);
-                int y1 = mouseY + (scale >> 1);
-                int y2 = mouseY - (scale >> 1);
-                lineColliders.add(new lineWallCollider(x1, x2, y1, y2));
-            }
         }
-        if(freedrawSelected){
+         if(freedrawSelected){
             cursor(CROSS);
-            if(mousePressed){
-                pos1 = mouseX;
-                pos2 = mouseY;
-                pos3 = pmouseX;
-                pos4 = pmouseY;
-                lineColliders.add(new lineWallCollider(pos1, pos3, pos2, pos4));
-            }
         }
     }
 
@@ -640,34 +606,6 @@ public class SirenApplication extends PApplet {
     }
 
     public void mousePressed() {
-        if(squareCreateOver){
-            squareSelected = !squareSelected;
-            scale = 50;
-        }
-        else if(horizontalOver){
-            horizontalSelected = !horizontalSelected;
-            scale = 50;
-        }
-        else if(verticalOver){
-            verticalSelected = !verticalSelected;
-            scale = 50;
-        }
-        else if(diagonalOver1){
-            diagonalSelected1 = !diagonalSelected1;
-            scale = 50;
-        }
-        else if(diagonalOver2){
-            diagonalSelected2 = !diagonalSelected2;
-            scale = 50;
-        }
-        else if(freedrawOver){
-            freedrawSelected = !freedrawSelected;
-            scale = 50;
-        }
-        else if(spawnOver){
-            spawnSelected = !spawnSelected;
-            scale = 50;
-        } /*else spawnSelected = freedrawSelected = diagonalSelected2 = diagonalSelected1 = verticalSelected = horizontalSelected = squareSelected = false;*/
 
         if (page == 1 && backOver) page = 0;
         if (page == 2 && backOver) page = 0;
@@ -684,16 +622,104 @@ public class SirenApplication extends PApplet {
         else if (circleOver7) click7 = true;
         else if (circleOver8) click8 = true;
 
-//        if(squareSelected){
-//            int x1 = 100 - scale/2;
-//            int y1 = 50 + scale/2;
-//
-//            int x2 = 200 + scale/2;
-//            int y2 = 50 - scale/2;
-//
-//            line(x1, y1, x2, y2);
-//        }
-    }
+
+        System.out.println("Clicked!");
+
+            if (squareSelected && (mouseButton == LEFT)) { //FILL
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int x3 = mouseX - (scale >> 1);
+                int x4 = mouseX + (scale >> 1);
+                int y1 = mouseY + (scale >> 1);
+                int y2 = mouseY + (scale >> 1);
+                int y3 = mouseY - (scale >> 1);
+                int y4 = mouseY - (scale >> 1);
+                if(y3 > (height-115)){
+                    squareSelected = false;
+                } else squareCollidersFill.add(new squareColliders(x1, x2, x3, x4, y1, y2, y3, y4, this));
+            }
+            if (squareSelected && (mouseButton == RIGHT)) {  //NO FILL
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int x3 = mouseX - (scale >> 1);
+                int x4 = mouseX + (scale >> 1);
+                int y1 = mouseY + (scale >> 1);
+                int y2 = mouseY + (scale >> 1);
+                int y3 = mouseY - (scale >> 1);
+                int y4 = mouseY - (scale >> 1);
+                if(y3 > (height-115)){
+                    squareSelected = false;
+                } else squareCollidersNoFill.add(new squareColliders(x1, x2, x3, x4, y1, y2, y3, y4, this));
+            }
+            if (horizontalSelected) {
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int y1 = mouseY;
+                int y2 = mouseY;
+                if(y1 > (height-115)){
+                    horizontalSelected = false;
+                } else lineColliders.add(new lineWallCollider(x1, x2, y1, y2, this));
+            }
+            if (verticalSelected) {
+                int x1 = mouseX;
+                int x2 = mouseX;
+                int y1 = mouseY + (scale >> 1);
+                int y2 = mouseY - (scale >> 1);
+                if(y1 > (height-115)){
+                    verticalSelected = false;
+                } else lineColliders.add(new lineWallCollider(x1, x2, y1, y2, this));
+            }
+            if (diagonalSelected1) {
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int y1 = mouseY - (scale >> 1);
+                int y2 = mouseY + (scale >> 1);
+                if(y1 > (height-115)){
+                    diagonalSelected1 = false;
+                } else  lineColliders.add(new lineWallCollider(x1, x2, y1, y2, this));
+            }
+            if (diagonalSelected2) {
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int y1 = mouseY + (scale >> 1);
+                int y2 = mouseY - (scale >> 1);
+                if(y1 > (height-115)){
+                    diagonalSelected2 = false;
+                } else lineColliders.add(new lineWallCollider(x1, x2, y1, y2, this));
+            }
+            if (freedrawSelected) {
+                pos1 = mouseX;
+                pos2 = mouseY;
+                pos3 = pmouseX;
+                pos4 = pmouseY;
+                if(pos2 > (height-115)){
+                    freedrawSelected = false;
+                }  lineColliders.add(new lineWallCollider(pos1, pos3, pos2, pos4, this));
+            }
+
+        if (squareCreateOver) {
+            squareSelected = !squareSelected;
+            scale = 50;
+        } else if (horizontalOver) {
+            horizontalSelected = !horizontalSelected;
+            scale = 50;
+        } else if (verticalOver) {
+            verticalSelected = !verticalSelected;
+            scale = 50;
+        } else if (diagonalOver1) {
+            diagonalSelected1 = !diagonalSelected1;
+            scale = 50;
+        } else if (diagonalOver2) {
+            diagonalSelected2 = !diagonalSelected2;
+            scale = 50;
+        } else if (freedrawOver) {
+            freedrawSelected = !freedrawSelected;
+            scale = 50;
+        } else if (spawnOver) {
+            spawnSelected = !spawnSelected;
+            scale = 50;
+        } /*else spawnSelected = freedrawSelected = diagonalSelected2 = diagonalSelected1 = verticalSelected = horizontalSelected = squareSelected = false;*/
+        }
 
     public void mouseWheel(@NotNull MouseEvent event){
         if(event.getCount() == -1){

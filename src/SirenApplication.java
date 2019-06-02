@@ -5,16 +5,18 @@ import processing.core.PImage;
 import processing.event.MouseEvent;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class SirenApplication extends PApplet {
     private int y;
     private int x;
+    private int pos1, pos2, pos3, pos4;
     private int randSize;
     private int yDist1, xDist1, yDist2, xDist2, yDist3, xDist3, yDist4, xDist4, yDist5, xDist5, yDist6, xDist6, yDist7, xDist7;
     private boolean circleOver1, circleOver2, circleOver3, circleOver4, circleOver5, circleOver6, circleOver7, circleOver8;
     private boolean click1, click2, click3, click4, click5, click6, click7, click8;
     private float smoothScale1, smoothScale2, smoothScale3, smoothScale4, smoothScale5, smoothScale6, smoothScale7, smoothScale8;
-    private boolean randomGenerateOver, manualGenerateOver, backOver, textOver, squareCreateOver, freedrawOver, saveOver, launchOver, horizontalOver, verticalOver, diagonalOver1, diagonalOver2, spawnOver;
+    private boolean randomGenerateOver, manualGenerateOver, backOver, textOver, squareCreateOver, freedrawOver, saveOver, launchOver, horizontalOver, verticalOver, diagonalOver1, diagonalOver2, spawnOver, triangleOver;
     private int buttonRandDimX, buttonManDimX, buttonDimY, buttonRandLocX, buttonRandLocY, buttonManLocX, buttonManLocY, shapeButtonWidth, shapeButtonHeight, shapeButtonLocY;
     private int backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight, taskBarXLoc, taskBarYLoc, taskBarHeight, taskBarWidth, page;
     private int a = color(0,0,0,175);
@@ -24,8 +26,10 @@ public class SirenApplication extends PApplet {
     private int underLineLenButtonRand;
     private int underLineLenButtonMan;
     public int scale = 50;
-    public boolean squareSelected, horizontalSelected, verticalSelected, diagonalSelected1, diagonalSelected2, freedrawSelected, spawnSelected;
-
+    public boolean squareSelected, horizontalSelected, verticalSelected, diagonalSelected1, diagonalSelected2, freedrawSelected, spawnSelected, triangleSelected;
+    public ArrayList<lineWallCollider> lineColliders = new ArrayList<lineWallCollider>();
+    public ArrayList<squareColliders> squareCollidersNoFill = new ArrayList<squareColliders>();
+    public ArrayList<squareColliders> squareCollidersFill = new ArrayList<squareColliders>();
 
     public static void main(String[] args) {
         PApplet.main("SirenApplication", args);
@@ -241,9 +245,10 @@ public class SirenApplication extends PApplet {
     }
     private void randomGenPage() {
         update();
-//        noStroke();
+
         background(30);
         createBackground(taskBarXLoc, taskBarYLoc, taskBarWidth, taskBarHeight);
+
         createShapeButton("Back",200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
         createShapeButton(510, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, squareCreateOver, "Square");
         createShapeButton(610, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, horizontalOver, "Horizontal");
@@ -254,28 +259,96 @@ public class SirenApplication extends PApplet {
         createShapeButton("Set Spawn" , 1270, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, spawnOver, "Square");
         createShapeButton("Save",   1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, saveOver);
         createShapeButton("Launch Game",  1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, launchOver);
+
+        for(lineWallCollider colliders : lineColliders){
+            colliders.showBoundary();
+        }
+        for(squareColliders colliders : squareCollidersFill){
+            colliders.squareFill();
+        }
+        for(squareColliders colliders : squareCollidersNoFill){
+            colliders.squareNoFill();
+        }
+
         if(squareSelected){
             stroke(255);
             rect(mouseX, mouseY, scale, scale);
+            if (mousePressed && (mouseButton == LEFT)){    // FILL
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int x3 = mouseX - (scale >> 1);
+                int x4 = mouseX + (scale >> 1);
+                int y1 = mouseY + (scale >> 1);
+                int y2 = mouseY + (scale >> 1);
+                int y3 = mouseY - (scale >> 1);
+                int y4 = mouseY - (scale >> 1);
+                squareCollidersFill.add(new squareColliders(x1,x2,x3,x4,y1,y2,y3,y4));
+            }
+            if (mousePressed && (mouseButton == RIGHT)){  //NO FILL
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int x3 = mouseX - (scale >> 1);
+                int x4 = mouseX + (scale >> 1);
+                int y1 = mouseY + (scale >> 1);
+                int y2 = mouseY + (scale >> 1);
+                int y3 = mouseY - (scale >> 1);
+                int y4 = mouseY - (scale >> 1);
+                squareCollidersNoFill.add(new squareColliders(x1,x2,x3,x4,y1,y2,y3,y4));
+            }
         }
         if(horizontalSelected){
             stroke(255);
-            line(mouseX - scale/2, mouseY, mouseX + scale/2, mouseY);
+            line(mouseX - (scale >> 1), mouseY, mouseX + (scale >> 1), mouseY);
+            if(mousePressed){
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int y1 = mouseY;
+                int y2 = mouseY;
+                lineColliders.add(new lineWallCollider(x1, x2, y1, y2));
+            }
         }
         if(verticalSelected){
             stroke(255);
-            line(mouseX, mouseY + scale/2, mouseX, mouseY - scale/2);
+            line(mouseX, mouseY + (scale >> 1), mouseX, mouseY - (scale >> 1));
+            if(mousePressed){
+                int x1 = mouseX;
+                int x2 = mouseX;
+                int y1 = mouseY + (scale >> 1);
+                int y2 = mouseY - (scale >> 1);
+                lineColliders.add(new lineWallCollider(x1, x2, y1, y2));
+            }
         }
         if(diagonalSelected1){
             stroke(255);
-            line(mouseX - scale/2, mouseY - scale/2, mouseX + scale/2, mouseY + scale/2);
+            line(mouseX - (scale >> 1), mouseY - (scale >> 1), mouseX + (scale >> 1), mouseY + (scale >> 1));
+            if(mousePressed){
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int y1 = mouseY - (scale >> 1);
+                int y2 = mouseY + (scale >> 1);
+                lineColliders.add(new lineWallCollider(x1, x2, y1, y2));
+            }
         }
         if(diagonalSelected2){
             stroke(255);
-            line(mouseX - scale/2, mouseY + scale/2, mouseX + scale/2, mouseY - scale/2);
+            line(mouseX - (scale >> 1), mouseY + (scale >> 1), mouseX + (scale >> 1), mouseY - (scale >> 1));
+            if(mousePressed){
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int y1 = mouseY + (scale >> 1);
+                int y2 = mouseY - (scale >> 1);
+                lineColliders.add(new lineWallCollider(x1, x2, y1, y2));
+            }
         }
         if(freedrawSelected){
             cursor(CROSS);
+            if(mousePressed){
+                pos1 = mouseX;
+                pos2 = mouseY;
+                pos3 = pmouseX;
+                pos4 = pmouseY;
+                lineColliders.add(new lineWallCollider(pos1, pos3, pos2, pos4));
+            }
         }
     }
 
@@ -390,7 +463,7 @@ public class SirenApplication extends PApplet {
         }
     }
 
-    public enum ShadowGradient {TOP_TO_BOTTOM, LEFT_TO_RIGHT, BUTTON_TO_TOP};
+    public enum ShadowGradient {TOP_TO_BOTTOM, LEFT_TO_RIGHT, BUTTON_TO_TOP}
 
     private void setGradient(int x, int y, float w, float h, int c1, int c2, ShadowGradient axis ) {
         noFill();
@@ -420,113 +493,72 @@ public class SirenApplication extends PApplet {
 
     @Contract(pure = true)
     private boolean mouseOverCircle(int randomSize, int x, int y) {
-        if ((mouseX >= x - randomSize / 2 && mouseX <= x + randomSize / 2) && (mouseY >= y - randomSize / 2 && mouseY <= y + randomSize / 2))
-            return true;
-        else return false;
+        return (mouseX >= x - randomSize / 2 && mouseX <= x + randomSize / 2) && (mouseY >= y - randomSize / 2 && mouseY <= y + randomSize / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverButtonRand(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverButtonMan(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverText(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverBack(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverSquare(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverHorizontal(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverVertical(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverDiagonal1(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverDiagonal2(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverFreedraw(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverSave(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverLaunch(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
     @Contract(pure = true)
     private boolean mouseOverSpawnSet(int locX, int locY, int dimX, int dimY) {
-        if ((mouseX > (locX - dimX/2) && (mouseX < locX + dimX/2)) && (mouseY > locY - dimY/2) && (mouseY < locY + dimY/2) ){
-            return true;
-        }
-        else return false;
+        return (mouseX > (locX - dimX / 2) && (mouseX < locX + dimX / 2)) && (mouseY > locY - dimY / 2) && (mouseY < locY + dimY / 2);
     }
 
 
@@ -564,7 +596,7 @@ public class SirenApplication extends PApplet {
         }
 
 
-        if(mouseOverText(90,height-180, 590, 32)){ textOver = true; } else textOver = false;
+        textOver = mouseOverText(90, height - 180, 590, 32);
 
         if(mouseOverButtonRand(buttonRandLocX,buttonRandLocY, buttonRandDimX, buttonDimY)){
             randomGenerateOver = true;

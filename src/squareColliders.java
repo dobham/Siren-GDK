@@ -3,7 +3,7 @@ import processing.core.PVector;
 
 public class squareColliders {
     private PVector a, b, c, d;
-    PApplet parent;
+    private PApplet parent;
     public squareColliders(int x1, int x2, int x3, int x4, int y1, int y2, int y3, int y4, PApplet applet){
         parent = applet;
         a = new PVector(x1, y1);

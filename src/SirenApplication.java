@@ -61,26 +61,26 @@ public class SirenApplication extends PApplet {
 
         buttonManDimX = 520;
 
-        buttonManLocX = width/2 + width/5;
+        buttonManLocX = (width >> 1) + width/5;
         buttonManLocY = height - 90;
 
-        backgroundXLoc = width/2;
+        backgroundXLoc = width >> 1;
         backgroundYLoc = height-115;
 
         backgroundWidth = width;
         backgroundHeight = (int)(height/3.5);
 
-        underLineLenButtonRand = buttonRandLocX - buttonRandDimX/2;
-        underLineLenButtonMan = buttonManLocX - buttonManDimX/2;
+        underLineLenButtonRand = buttonRandLocX - (buttonRandDimX >> 1);
+        underLineLenButtonMan = buttonManLocX - (buttonManDimX >> 1);
 
-        taskBarXLoc = width/2;
+        taskBarXLoc = width >> 1;
         taskBarYLoc = height-height/20;
 
         taskBarHeight =(height/10);
         taskBarWidth = width;
 
         page = 0;
-        randSize = width / 8;
+        randSize = width >> 3;
         x = (int) random(width);
         y = 25;
         smoothScale1 = smoothScale2 = smoothScale3 = smoothScale4 = smoothScale5 = smoothScale6 = smoothScale7 = smoothScale8 = width / 8;
@@ -113,50 +113,50 @@ public class SirenApplication extends PApplet {
 //        fill(202, 0, 5);
         fill(255);
         if (click1) {
-            for (int i = 0; i < width / 8; i += 1000) {
+            for (int i = 0; i < width >> 3; i += 1000) {
                 smoothScale1 -= 8;
                 circleCreate(x, y, smoothScale1);
             }
         } else circleCreate(x, y, randSize);
         if (click2) {
-            for (int i = 0; i < width / 8; i += 1000) {
+            for (int i = 0; i < width >> 3; i += 1000) {
                 smoothScale2 -= 8;
                 circleCreate(xDist1, y + yDist1, smoothScale2);
             }
         } else circleCreate(xDist1, y + yDist1, randSize);
         if (click3) {
-            for (int i = 0; i < width / 8; i += 1000) {
+            for (int i = 0; i < width >> 3; i += 1000) {
                 smoothScale3 -= 8;
                 circleCreate(xDist2, y + yDist2, smoothScale3);
             }
         } else circleCreate(xDist2, y + yDist2, randSize);
         if (click4) {
-            for (int i = 0; i < width / 8; i += 1000) {
+            for (int i = 0; i < width >> 3; i += 1000) {
                 smoothScale4 -= 8;
                 circleCreate(xDist3, y + yDist3, smoothScale4);
             }
         } else circleCreate(xDist3, y + yDist3, randSize);
         if (click5) {
-            for (int i = 0; i < width / 8; i += 1000) {
+            for (int i = 0; i < width >> 3; i += 1000) {
                 smoothScale5 -= 8;
                 circleCreate(x + xDist4, y + yDist4, smoothScale5);
             }
         } else circleCreate(x + xDist4, y + yDist4, randSize);
         if (click6) {
-            for (int i = 0; i < width / 8; i += 1000) {
+            for (int i = 0; i < width >> 3; i += 1000) {
                 smoothScale6 -= 8;
                 circleCreate(x + xDist5, y + yDist5, smoothScale6);
             }
         } else circleCreate(x + xDist5, y + yDist5, randSize);
 
         if (click7) {
-            for (int i = 0; i < width / 8; i += 1000) {
+            for (int i = 0; i < width >> 3; i += 1000) {
                 smoothScale7 -= 8;
                 circleCreate(x + xDist6, y + yDist6, smoothScale7);
             }
         } else circleCreate(x + xDist6, y + yDist6, randSize);
         if (click8) {
-            for (int i = 0; i < width / 8; i += 1000) {
+            for (int i = 0; i < width >> 3; i += 1000) {
                 smoothScale8 -= 8;
                 circleCreate(x + xDist7, y + yDist7, smoothScale8);
             }
@@ -170,19 +170,19 @@ public class SirenApplication extends PApplet {
 
         createBackground(backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight);
         if(randomGenerateOver){
-            if(underLineLenButtonRand <= buttonRandLocX + buttonRandDimX/2){
-                for (int i = 0; i < buttonRandLocX + buttonRandDimX/2; i+=50) {
+            if(underLineLenButtonRand <= buttonRandLocX + (buttonRandDimX >> 1)){
+                for (int i = 0; i < buttonRandLocX + (buttonRandDimX >> 1); i+=50) {
                     underLineLenButtonRand +=2;
-                    createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX - buttonRandDimX/2, underLineLenButtonRand);
+                    createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX - (buttonRandDimX >> 1), underLineLenButtonRand);
                 }
             }
-            else createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX - buttonRandDimX/2, underLineLenButtonRand);
+            else createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX - (buttonRandDimX >> 1), underLineLenButtonRand);
         }
         else {
-            if (underLineLenButtonRand > buttonRandLocX + buttonRandDimX/2){
-                for (int i = 0; i < buttonRandLocX + buttonRandDimX/2; i+=50) {
+            if (underLineLenButtonRand > buttonRandLocX + (buttonRandDimX >> 1)){
+                for (int i = 0; i < buttonRandLocX + (buttonRandDimX >> 1); i+=50) {
                     underLineLenButtonRand-=2;
-                    createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX - buttonRandDimX/2, underLineLenButtonRand);
+                    createButton("Random Generation", buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY, randomGenerateOver, buttonRandLocX - (buttonRandDimX >> 1), underLineLenButtonRand);
                 }
             }
             else {
@@ -191,19 +191,19 @@ public class SirenApplication extends PApplet {
             }
         }
         if (manualGenerateOver){
-            if(underLineLenButtonMan <= buttonManLocX + buttonManDimX/2){
+            if(underLineLenButtonMan <= buttonManLocX + (buttonManDimX >> 1)){
                 for (int i = 0; i < buttonManLocX + buttonManDimX/2; i+=50) {
                     underLineLenButtonMan+=2;
-                    createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX - buttonManDimX/2, underLineLenButtonMan);
+                    createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX - (buttonManDimX >> 1), underLineLenButtonMan);
                 }
             }
-            else createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX - buttonManDimX/2, underLineLenButtonMan);
+            else createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX - (buttonManDimX >> 1), underLineLenButtonMan);
         }
         else {
-            if (underLineLenButtonMan > buttonManLocX + buttonManDimX/2){
+            if (underLineLenButtonMan > buttonManLocX + (buttonManDimX >> 1)){
                 for (int i = 0; i < buttonManLocX + buttonManDimX/2; i+=50) {
                     underLineLenButtonMan-=2;
-                    createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX - buttonManDimX/2, underLineLenButtonMan);
+                    createButton("Manual Environment Setup", buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY, manualGenerateOver, buttonManLocX - (buttonManDimX >> 1), underLineLenButtonMan);
                 }
             }
             else {
@@ -242,7 +242,7 @@ public class SirenApplication extends PApplet {
             yDist6 = xDist6 = (int) (width - random(width));
             yDist7 = xDist7 = (int) (width - random(height))+100;
             click1 = click2 = click3 = click4 = click5 = click6 = click7 = click8 = false;
-            smoothScale1 = smoothScale2 = smoothScale3 = smoothScale4 = smoothScale5 = smoothScale6 = smoothScale7 = smoothScale8 = width / 8;
+            smoothScale1 = smoothScale2 = smoothScale3 = smoothScale4 = smoothScale5 = smoothScale6 = smoothScale7 = smoothScale8 = width >> 3;
         }
         y -= 10;
     }
@@ -365,7 +365,7 @@ public class SirenApplication extends PApplet {
         rect(xLoc, yLoc, xDim, yDim);
         fill(200);
         textSize(40);
-        text(label, xLoc-(xDim/2), yLoc+yDim/4);
+        text(label, xLoc -(xDim >> 1), yLoc + (yDim >> 2));
     }
 
     private void createButton(String label, int xLoc, int yLoc, int xDim, int yDim, boolean hover, int start, int end){
@@ -374,7 +374,7 @@ public class SirenApplication extends PApplet {
         rect(xLoc, yLoc, xDim, yDim);
         fill(200);
         textSize(40);
-        text(label, xLoc-(xDim/2), yLoc+yDim/4);
+        text(label, xLoc - (xDim >> 1), yLoc + (yDim >> 2));
         stroke(255);
         line(start, yLoc+15, end, yLoc+15);
         line(start, yLoc+14, end, yLoc+14);
@@ -386,7 +386,7 @@ public class SirenApplication extends PApplet {
         rect(xLoc, yLoc, xDim, yDim);
         fill(200);
         textSize(40);
-        text(label, xLoc-(xDim/2), yLoc+yDim/4);
+        text(label, xLoc-(xDim/2), yLoc + (yDim >> 2));
     }
 
     private void createShapeButton(String label, int xLoc, int yLoc, int xDim, int yDim, boolean hover, @NotNull String shape){
@@ -396,14 +396,14 @@ public class SirenApplication extends PApplet {
         fill(200);
         textSize(20);
         if(shape.equals("Curve")){
-            text(label, xLoc-((int)(xDim * 1.5)) + 100, yLoc+yDim/4);
+            text(label, xLoc-((int)(xDim * 1.5)) + 100, yLoc + (yDim >> 2));
             noFill();
             stroke(255);
-            curve(xLoc*2 + 100, yLoc-90, xLoc - xDim/2 + 100, yLoc-50, xLoc + 100, yLoc, xLoc + xDim*2 + 100, yLoc);
+            curve((xLoc << 1) + 100, yLoc-90, xLoc - (xDim >> 1) + 100, yLoc-50, xLoc + 100, yLoc, xLoc + (xDim << 1) + 100, yLoc);
         }
         if(shape.equals("Square")){
             textSize(20);
-            text(label, xLoc-(xDim/2), yLoc+yDim/2);
+            text(label, xLoc-(xDim >> 1), yLoc+ (yDim >> 1));
             fill(240,230,140);
             rect(xLoc, yLoc-yDim/2 - 8, 50,50);
         }

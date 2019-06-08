@@ -428,7 +428,7 @@ public class SirenApplication extends PApplet {
 
     public enum ShadowGradient {TOP_TO_BOTTOM, LEFT_TO_RIGHT, BUTTON_TO_TOP}
 
-    private void setGradient(int x, int y, float w, float h, int c1, int c2, ShadowGradient axis ) {
+    private void setGradient(int x, int y, float w, float h, int c1, int c2, ShadowGradient axis) {
         noFill();
         if (axis == ShadowGradient.BUTTON_TO_TOP) {  // BOTTOM TO TOP GRADIENT FOR BOX SHADOWS
             for (float i = 0, j = y; j <= y+h-1 && i <= 0.8; j++, i+=0.1) {

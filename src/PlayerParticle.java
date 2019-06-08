@@ -14,7 +14,7 @@ public class PlayerParticle {
 
     public PlayerParticle(PApplet applet){
         parent = applet;
-        pos = new PVector(parent.width / 2, (parent.height - 115) /2);
+        pos = new PVector(parent.width >> 1, (parent.height - 115) >> 1);
     }
     public PlayerParticle(int x, int y,PApplet applet){
         parent = applet;

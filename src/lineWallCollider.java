@@ -2,7 +2,7 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 public class lineWallCollider {
-    private PVector a, b;
+    public PVector a, b;
     private PApplet parent;
     public lineWallCollider(int x1, int x2, int y1, int y2, PApplet applet){
         parent = applet;
@@ -13,7 +13,4 @@ public class lineWallCollider {
         parent.stroke(255);
         parent.line(a.x, a.y, b.x, b.y);
     }
-//    public void testMessage(){
-//        System.out.println("Test Print!");
-//    }
 }

@@ -3,7 +3,8 @@ import processing.core.PVector;
 
 public class Raycaster {
     PApplet parent;
-    public PVector pos, dir;
+    public PVector pos, dir, pt;
+    public float t,u;
     public Raycaster(PVector position, float angle, PApplet applet){
         pos = position;
         dir = PVector.fromAngle(angle);
@@ -14,7 +15,7 @@ public class Raycaster {
         dir = PVector.fromAngle(angle);
     }
 
-    public void castRay(lineWallCollider wall){
+    public PVector castRay(lineWallCollider wall){
         float x1 = wall.a.x;
         float x2 = wall.b.x;
         float x3 = pos.x;
@@ -25,5 +26,19 @@ public class Raycaster {
         float y4 = pos.y + dir.y;
 
         float den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+        if (den == 0) {
+            return null;
+        }
+
+        t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
+        u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
+        if (t > 0 && t < 1 && u > 0) {
+        PVector pt = new PVector();
+            pt.x = x1 + t * (x2 - x1);
+            pt.y = y1 + t * (y2 - y1);
+            return pt;
+        } else {
+            return null;
+        }
     }
 }

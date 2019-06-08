@@ -28,11 +28,9 @@ public class SirenApplication extends PApplet {
     private int underLineLenButtonMan;
     public int scale = 50;
     public boolean squareSelected, horizontalSelected, verticalSelected, diagonalSelected1, diagonalSelected2, freedrawSelected, spawnSelected, triangleSelected;
-    public ArrayList<lineWallCollider> lineColliders = new ArrayList<lineWallCollider>();
-    public ArrayList<squareColliders> squareCollidersNoFill = new ArrayList<squareColliders>();
     public ArrayList<squareColliders> squareCollidersFill = new ArrayList<squareColliders>();
     public ArrayList<TriangleColliders> triangleCollidersFill = new ArrayList<TriangleColliders>();
-    public ArrayList<TriangleColliders> triangleCollidersNoFill = new ArrayList<TriangleColliders>();
+    public ArrayList<lineWallCollider> wallMain = new ArrayList<lineWallCollider>();
 
     public static void main(String[] args) {
         PApplet.main("SirenApplication", args);
@@ -260,33 +258,19 @@ public class SirenApplication extends PApplet {
         createShapeButton(950, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, diagonalOver2, "Diagonal2");
         createShapeButton("Free Draw" , 1100, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, freedrawOver, "Curve");
         createShapeButton("Set Spawn" , 1270, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, spawnOver, "Square");
-        createShapeButton("Save",   1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, saveOver);
+        createShapeButton("Save",   1450, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, saveOver);
         createShapeButton("Launch Game",  1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, launchOver);
 
-        if (!(lineColliders.isEmpty())){
-            for(lineWallCollider lineColliders : lineColliders){
+        if (!(wallMain.isEmpty())){
+            for(lineWallCollider lineColliders : wallMain){
                 lineColliders.showBoundary();
             }
         }
-
-        if (!(squareCollidersNoFill.isEmpty())){
-            for(squareColliders squareColliders : squareCollidersNoFill){
-                squareColliders.squareNoFill();
-            }
-        }
-
         if (!(squareCollidersFill.isEmpty())){
             for(squareColliders squareColliders : squareCollidersFill){
                 squareColliders.squareFill();
             }
         }
-
-        if(!(triangleCollidersNoFill.isEmpty())){
-            for(TriangleColliders triangleColliders : triangleCollidersNoFill){
-                triangleColliders.triangleNoFill();
-            }
-        }
-
         if(!(triangleCollidersFill.isEmpty())){
             for(TriangleColliders triangleColliders : triangleCollidersFill){
                 triangleColliders.triangleFill();
@@ -295,6 +279,10 @@ public class SirenApplication extends PApplet {
 
         if(squareSelected){
             stroke(255);
+            rect(mouseX, mouseY, scale, scale);
+        }
+        if(spawnSelected){
+            fill(240,230,140);
             rect(mouseX, mouseY, scale, scale);
         }
         if(horizontalSelected){
@@ -319,13 +307,7 @@ public class SirenApplication extends PApplet {
         if(triangleSelected){
             stroke(255);
             fill(255);
-            int x1 = mouseX - (scale >> 1);
-            int x2 = mouseX;
-            int x3 = mouseX + (scale >> 1);
-            int y1 = mouseY + (scale >> 1);
-            int y2 = mouseY - (scale >> 1);
-            int y3 = mouseY + (scale >> 1);
-            triangle(x1, y1, x2, y2, x3, y3);
+            triangle(mouseX - (scale >> 1), mouseY + (scale >> 1), mouseX, mouseY - (scale >> 1), mouseX + (scale >> 1), mouseY + (scale >> 1));
         }
     }
 
@@ -405,7 +387,7 @@ public class SirenApplication extends PApplet {
             textSize(20);
             text(label, xLoc-(xDim >> 1), yLoc+ (yDim >> 1));
             fill(240,230,140);
-            rect(xLoc, yLoc-yDim/2 - 8, 50,50);
+            rect(xLoc, yLoc-yDim/2 - 8, 30,30);
         }
     }
 
@@ -645,11 +627,25 @@ public class SirenApplication extends PApplet {
         else if (circleOver8) click8 = true;
 
             if (squareSelected && (mouseButton == LEFT)) { //FILL
-                int x = mouseX;
-                int y = mouseY;
+                int xMain = mouseX;
+                int yMain = mouseY;
+                int x1 = mouseX - (scale >> 1);
+                int x2 = mouseX + (scale >> 1);
+                int x3 = mouseX - (scale >> 1);
+                int x4 = mouseX + (scale >> 1);
+                int y1 = mouseY + (scale >> 1);
+                int y2 = mouseY + (scale >> 1);
+                int y3 = mouseY - (scale >> 1);
+                int y4 = mouseY - (scale >> 1);
                 if(y > (height-115)){
                     squareSelected = false;
-                } else squareCollidersFill.add(new squareColliders(x, y, scale, this));
+                } else {
+                    squareCollidersFill.add(new squareColliders(xMain, yMain, scale, this));
+                    wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
+                    wallMain.add(new lineWallCollider(x1, x3, y1, y3, this));
+                    wallMain.add(new lineWallCollider(x2, x4, y2, y4, this));
+                    wallMain.add(new lineWallCollider(x3, x4, y3, y4, this));
+                }
             }
             if (squareSelected && (mouseButton == RIGHT)) {  //NO FILL
                 int x1 = mouseX - (scale >> 1);
@@ -662,7 +658,12 @@ public class SirenApplication extends PApplet {
                 int y4 = mouseY - (scale >> 1);
                 if(y3 > (height-115)){
                     squareSelected = false;
-                } else squareCollidersNoFill.add(new squareColliders(x1, x2, x3, x4, y1, y2, y3, y4, this));
+                } else {
+                    wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
+                    wallMain.add(new lineWallCollider(x1, x3, y1, y3, this));
+                    wallMain.add(new lineWallCollider(x2, x4, y2, y4, this));
+                    wallMain.add(new lineWallCollider(x3, x4, y3, y4, this));
+                }
             }
             if (horizontalSelected) {
                 int x1 = mouseX - (scale >> 1);
@@ -671,7 +672,7 @@ public class SirenApplication extends PApplet {
                 int y2 = mouseY;
                 if(y1 > (height-115)){
                     horizontalSelected = false;
-                } else lineColliders.add(new lineWallCollider(x1, x2, y1, y2, this));
+                } else wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
             }
             if (verticalSelected) {
                 int x1 = mouseX;
@@ -680,7 +681,7 @@ public class SirenApplication extends PApplet {
                 int y2 = mouseY - (scale >> 1);
                 if(y1 > (height-115)){
                     verticalSelected = false;
-                } else lineColliders.add(new lineWallCollider(x1, x2, y1, y2, this));
+                } else wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
             }
             if (diagonalSelected1) {
                 int x1 = mouseX - (scale >> 1);
@@ -689,7 +690,7 @@ public class SirenApplication extends PApplet {
                 int y2 = mouseY + (scale >> 1);
                 if(y1 > (height-115)){
                     diagonalSelected1 = false;
-                } else lineColliders.add(new lineWallCollider(x1, x2, y1, y2, this));
+                } else wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
             }
             if (diagonalSelected2) {
                 int x1 = mouseX - (scale >> 1);
@@ -698,7 +699,7 @@ public class SirenApplication extends PApplet {
                 int y2 = mouseY - (scale >> 1);
                 if(y1 > (height-115)){
                     diagonalSelected2 = false;
-                } else lineColliders.add(new lineWallCollider(x1, x2, y1, y2, this));
+                } else wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
             }
             if (freedrawSelected) {
                 pos1 = mouseX;
@@ -707,7 +708,7 @@ public class SirenApplication extends PApplet {
                 pos4 = pmouseY;
                 if(pos2 > (height-115)){
                     freedrawSelected = false;
-                } else lineColliders.add(new lineWallCollider(pos1, pos3, pos2, pos4, this));
+                } else wallMain.add(new lineWallCollider(pos1, pos3, pos2, pos4, this));
             }
             if(triangleSelected && (mouseButton == LEFT)) {
                 int x1 = mouseX - (scale >> 1);
@@ -718,7 +719,12 @@ public class SirenApplication extends PApplet {
                 int y3 = mouseY + (scale >> 1);
                 if(y1 > (height-115)){
                     triangleSelected = false;
-                } else  triangleCollidersFill.add(new TriangleColliders(x1, x2, x3, y1, y2,y3,this));
+                } else  {
+                    triangleCollidersFill.add(new TriangleColliders(x1, x2, x3, y1, y2,y3,this));
+                    wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
+                    wallMain.add(new lineWallCollider(x1, x3, y1, y3, this));
+                    wallMain.add(new lineWallCollider(x2, x3, y2, y3, this));
+                }
             }
 
             if(triangleSelected && (mouseButton == RIGHT)) {
@@ -730,7 +736,11 @@ public class SirenApplication extends PApplet {
                 int y3 = mouseY + (scale >> 1);
                 if(y1 > (height-115)){
                     triangleSelected = false;
-                } else triangleCollidersNoFill.add(new TriangleColliders(x1, x2, x3, y1, y2,y3,this));
+                } else {
+                    wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
+                    wallMain.add(new lineWallCollider(x1, x3, y1, y3, this));
+                    wallMain.add(new lineWallCollider(x2, x3, y2, y3, this));
+                }
             }
 
         if (squareCreateOver) {

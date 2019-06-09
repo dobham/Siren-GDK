@@ -15,7 +15,8 @@ public class SirenApplication extends PApplet {
     private boolean circleOver1, circleOver2, circleOver3, circleOver4, circleOver5, circleOver6, circleOver7, circleOver8;
     private boolean click1, click2, click3, click4, click5, click6, click7, click8;
     private float smoothScale1, smoothScale2, smoothScale3, smoothScale4, smoothScale5, smoothScale6, smoothScale7, smoothScale8;
-    private boolean randomGenerateOver, manualGenerateOver, backOver, textOver, squareCreateOver, freedrawOver, saveOver, launchOver, horizontalOver, verticalOver, diagonalOver1, diagonalOver2, spawnOver, triangleOver;
+    private boolean randomGenerateOver, manualGenerateOver, backOver, backOver2 , textOver, squareCreateOver, freedrawOver, saveOver, saveOver2, launchOver, launchOver2, horizontalOver, verticalOver, diagonalOver1, diagonalOver2, spawnOver, spawnOver2, triangleOver, cavernOver, mazeOver;
+    private boolean squareSelected, horizontalSelected, verticalSelected, diagonalSelected1, diagonalSelected2, freedrawSelected, spawnSelected, spawnSelected2, triangleSelected, cavernSelected, mazeSelected;
     private int buttonRandDimX, buttonManDimX, buttonDimY, buttonRandLocX, buttonRandLocY, buttonManLocX, buttonManLocY, shapeButtonWidth, shapeButtonHeight, shapeButtonLocY;
     private int backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight, taskBarXLoc, taskBarYLoc, taskBarHeight, taskBarWidth, page;
     private int a = color(0, 0, 0, 175);
@@ -25,14 +26,8 @@ public class SirenApplication extends PApplet {
     private int underLineLenButtonRand;
     private int underLineLenButtonMan;
     private int scale = 50;
-    private boolean squareSelected;
-    private boolean horizontalSelected;
-    private boolean verticalSelected;
-    private boolean diagonalSelected1;
-    private boolean diagonalSelected2;
-    private boolean freedrawSelected;
-    private boolean spawnSelected;
-    private boolean triangleSelected;
+    public int posX;
+    public int posY;
     @NotNull
     private ArrayList<squareColliders> squareCollidersFill = new ArrayList<>();
     @NotNull
@@ -317,6 +312,17 @@ public class SirenApplication extends PApplet {
     private void randomGenPage() {
         background(30);
         createBackground(taskBarXLoc, taskBarYLoc, taskBarWidth, taskBarHeight);
+        createShapeButton("Back", 200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
+        createShapeButton("Maze Map", 500, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
+        createShapeButton("Cube Cavern Map", 750, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
+        createShapeButton("Set Spawn", 1200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, spawnOver, "Square");
+        createShapeButton("Save", 1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, saveOver);
+        createShapeButton("Launch Game", 1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, launchOver);
+    }
+
+    private void gamePage(){
+        background(30);
+
     }
 
     private void createBackground(int xLoc, int yLoc, int width, int height) {
@@ -482,6 +488,11 @@ public class SirenApplication extends PApplet {
     }
 
     @Contract(pure = true)
+    private boolean mouseOverBack(int locX, int locY, int dimX, int dimY) {
+        return (mouseX > (locX - (dimX >> 1)) && (mouseX < locX + (dimX >> 1)) && (mouseY > locY - (dimY >> 1)) && (mouseY < locY + (dimY >> 1)));
+    }
+
+    @Contract(pure = true)
     private boolean mouseOverSquare(int locY, int dimX, int dimY) {
         return (mouseX > (510 - (dimX >> 1)) && (mouseX < 510 + (dimX >> 1)) && (mouseY > locY - (dimY >> 1)) && (mouseY < locY + (dimY >> 1)));
     }
@@ -522,8 +533,18 @@ public class SirenApplication extends PApplet {
     }
 
     @Contract(pure = true)
+    private boolean mouseOverSave(int locX, int locY, int dimX, int dimY) {
+        return (mouseX > (locX - (dimX >> 1)) && (mouseX < locX + (dimX >> 1))) && (mouseY > locY - (dimY >> 1)) && (mouseY < locY + (dimY >> 1));
+    }
+
+    @Contract(pure = true)
     private boolean mouseOverLaunch(int locY, int dimX, int dimY) {
         return (mouseX > (1600 - (dimX >> 1)) && (mouseX < 1600 + (dimX >> 1))) && (mouseY > locY - (dimY >> 1)) && (mouseY < locY + (dimY >> 1));
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverLaunch(int locX, int locY, int dimX, int dimY) {
+        return (mouseX > (locX - (dimX >> 1)) && (mouseX < locX + (dimX >> 1))) && (mouseY > locY - (dimY >> 1)) && (mouseY < locY + (dimY >> 1));
     }
 
     @Contract(pure = true)
@@ -532,54 +553,91 @@ public class SirenApplication extends PApplet {
     }
 
     @Contract(pure = true)
+    private boolean mouseOverSpawnSet(int locX, int locY, int dimX, int dimY) {
+        return (mouseX > (locX - (dimX >> 1)) && (mouseX < locX + (dimX >> 1))) && (mouseY > locY - (dimY >> 1)) && (mouseY < locY + (dimY >> 1));
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverMaze(int locX, int locY, int dimX, int dimY) {
+        return (mouseX > (locX - (dimX >> 1)) && (mouseX < locX + (dimX >> 1))) && (mouseY > locY - (dimY >> 1)) && (mouseY < locY + (dimY >> 1));
+    }
+
+    @Contract(pure = true)
+    private boolean mouseOverCavern(int locX, int locY, int dimX, int dimY) {
+        return (mouseX > (locX - (dimX >> 1)) && (mouseX < locX + (dimX >> 1))) && (mouseY > locY - (dimY >> 1)) && (mouseY < locY + (dimY >> 1));
+    }
+
+    @Contract(pure = true)
     private void update() {
+        /*
+        * createShapeButton("Maze Map", 500, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
+        createShapeButton("Cube Cavern Map", 750, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
+        * */
         if (mouseOverSpawnSet(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             spawnOver = true;
-            squareCreateOver = freedrawOver = saveOver = launchOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = false;
+            squareCreateOver = freedrawOver = saveOver = launchOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
+        } else if (mouseOverSpawnSet(1200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
+            spawnOver2 = true;
+            squareCreateOver = freedrawOver = saveOver = launchOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = false;
         } else if (mouseOverLaunch(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             launchOver = true;
-            squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = false;
+            squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
+        }else if (mouseOverLaunch(1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
+            launchOver2 = true;
+            squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = spawnOver2 = false;
         } else if (mouseOverSave(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             saveOver = true;
-            squareCreateOver = freedrawOver = launchOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = false;
+            squareCreateOver = freedrawOver = launchOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
+        }else if (mouseOverSave(1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
+            saveOver2 = true;
+            squareCreateOver = freedrawOver = launchOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = launchOver2 = spawnOver2 = false;
         } else if (mouseOverFreedraw(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             freedrawOver = true;
-            squareCreateOver = launchOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = false;
+            squareCreateOver = launchOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = launchOver2 = saveOver2 = spawnOver2 = false;
         } else if (mouseOverDiagonal1(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             diagonalOver1 = true;
-            launchOver = squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver2 = triangleOver = false;
+            launchOver = squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
         } else if (mouseOverDiagonal2(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             diagonalOver2 = true;
-            squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = launchOver = diagonalOver1 = triangleOver = false;
+            squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = launchOver = diagonalOver1 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
         } else if (mouseOverVertical(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             verticalOver = true;
-            squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = launchOver = diagonalOver1 = diagonalOver2 = triangleOver = false;
+            squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = launchOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
         } else if (mouseOverHorizontal(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             horizontalOver = true;
-            squareCreateOver = freedrawOver = saveOver = spawnOver = launchOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = false;
+            squareCreateOver = freedrawOver = saveOver = spawnOver = launchOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
         } else if (mouseOverSquare(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             squareCreateOver = true;
-            launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = false;
+            launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
         } else if (mouseOverTriangle(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             triangleOver = true;
-            launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = false;
+            launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
+        } else if (mouseOverCavern(750, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
+            cavernOver = true;
+            launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
+        } else if (mouseOverMaze(500, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
+            mazeOver = true;
+            launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = cavernOver = saveOver2 = launchOver2 = spawnOver2 = false;
         } else {
-            squareCreateOver = launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = false;
+            squareCreateOver = launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
         }
 
         textOver = mouseOverText(height - 180);
 
         if (mouseOverButtonRand(buttonRandLocX, buttonRandLocY, buttonRandDimX, buttonDimY)) {
             randomGenerateOver = true;
-            backOver = manualGenerateOver = false;
+            backOver =  backOver2 = manualGenerateOver = false;
         } else if (mouseOverButtonMan(buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY)) {
             manualGenerateOver = true;
-            backOver = randomGenerateOver = false;
+            backOver =  backOver2 = randomGenerateOver = false;
         } else if (mouseOverBack(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             backOver = true;
-            manualGenerateOver = randomGenerateOver = false;
-        } else {
+            backOver2 = manualGenerateOver = randomGenerateOver = false;
+        } else if (mouseOverBack(200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
+            backOver2 = true;
             backOver = manualGenerateOver = randomGenerateOver = false;
+        } else {
+            backOver = backOver2 = manualGenerateOver = randomGenerateOver = false;
         }
 
         if (mouseOverCircle(randSize, x, y)) {
@@ -727,7 +785,6 @@ public class SirenApplication extends PApplet {
                 wallMain.add(new lineWallCollider(x2, x3, y2, y3, this));
             }
         }
-
         if (triangleSelected && (mouseButton == RIGHT)) {
             int x1 = mouseX - (scale >> 1);
             int x2 = mouseX;
@@ -741,6 +798,17 @@ public class SirenApplication extends PApplet {
                 wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
                 wallMain.add(new lineWallCollider(x1, x3, y1, y3, this));
                 wallMain.add(new lineWallCollider(x2, x3, y2, y3, this));
+            }
+        }
+        if(spawnSelected){
+            int xMain = mouseX;
+            int yMain = mouseY;
+            if (y > (height - 115)) {
+                spawnSelected = false;
+            } else {
+                posX = mouseX;
+                posY = mouseY;
+                rect(xMain, yMain, 30, 30);
             }
         }
 
@@ -769,7 +837,6 @@ public class SirenApplication extends PApplet {
             triangleSelected = !triangleSelected;
             scale = 50;
         }
-
         /*else spawnSelected = freedrawSelected = diagonalSelected2 = diagonalSelected1 = verticalSelected = horizontalSelected = squareSelected = false;*/
     }
 

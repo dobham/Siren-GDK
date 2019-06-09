@@ -48,9 +48,9 @@ public class PlayerParticle {
             }
             if (closest != null) {
                 parent.stroke(255);
-                parent.line(this.pos.x, this.pos.y, closest.x, closest.y);
+                parent.line(pos.x, pos.y, closest.x, closest.y);
             }
-//            programScene.get(i) = record;
+            programScene.set(i, record);
         }
         return programScene;
     }

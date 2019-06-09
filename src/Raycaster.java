@@ -2,9 +2,11 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 public class Raycaster {
-    PApplet parent;
-    public PVector pos, dir, pt;
-    public float t,u;
+    private final PApplet parent;
+    private final PVector pos;
+    public PVector dir;
+    public PVector pt;
+
     public Raycaster(PVector position, float angle, PApplet applet){
         pos = position;
         dir = PVector.fromAngle(angle);
@@ -30,8 +32,8 @@ public class Raycaster {
             return null;
         }
 
-        t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
-        u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
+        float t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den;
+        float u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den;
         if (t > 0 && t < 1 && u > 0) {
         PVector pt = new PVector();
             pt.x = x1 + t * (x2 - x1);

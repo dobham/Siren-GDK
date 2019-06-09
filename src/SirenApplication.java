@@ -2,6 +2,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import processing.core.PApplet;
 import processing.core.PImage;
+import processing.core.PVector;
 import processing.event.MouseEvent;
 
 import java.awt.*;

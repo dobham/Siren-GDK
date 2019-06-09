@@ -11,8 +11,14 @@ public class TriangleColliders {
         b = new PVector(x2,y2);
         c = new PVector(x3,y3);
     }
-    public void triangleNoFill(){
+    public void triangleFill(){
         parent.fill(255);
         parent.triangle(a.x, a.y, b.x, b.y, c.x, c.y);
+    }
+    public void triangleNoFill(){
+        parent.stroke(255);
+        parent.line(a.x, a.y, b.x, b.y);
+        parent.line(a.x, a.y, c.x, c.y);
+        parent.line(b.x, b.y, c.x, c.y);
     }
 }

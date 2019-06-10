@@ -12,12 +12,12 @@ public class SirenApplication extends PApplet {
     private boolean circleOver1, circleOver2, circleOver3, circleOver4, circleOver5, circleOver6, circleOver7, circleOver8;
     private boolean click1, click2, click3, click4, click5, click6, click7, click8;
     private float smoothScale1, smoothScale2, smoothScale3, smoothScale4, smoothScale5, smoothScale6, smoothScale7, smoothScale8;
-    private boolean randomGenerateOver, manualGenerateOver, backOver, backOver2 , textOver, squareCreateOver, freedrawOver, saveOver, saveOver2, launchOver, launchOver2, horizontalOver, verticalOver, diagonalOver1, diagonalOver2, spawnOver, spawnOver2, triangleOver, cavernOver, mazeOver;
+    private boolean randomGenerateOver, manualGenerateOver, backOver, backOver2, textOver, squareCreateOver, freedrawOver, saveOver, saveOver2, launchOver, launchOver2, horizontalOver, verticalOver, diagonalOver1, diagonalOver2, spawnOver, triangleOver, cavernOver, mazeOver;
     private boolean squareSelected, horizontalSelected, verticalSelected, diagonalSelected1, diagonalSelected2, freedrawSelected, spawnSelected, spawnSelected2, triangleSelected, cavernSelected, mazeSelected;
     private int buttonRandDimX, buttonManDimX, buttonDimY, buttonRandLocX, buttonRandLocY, buttonManLocX, buttonManLocY, shapeButtonWidth, shapeButtonHeight, shapeButtonLocY;
     private int backgroundXLoc, backgroundYLoc, backgroundWidth, backgroundHeight, taskBarXLoc, taskBarYLoc, taskBarHeight, taskBarWidth, page;
-    private int a = color(0, 0, 0, 175);
-    private int b = color(0, 0, 0, 0);
+    private final int a = color(0, 0, 0, 175);
+    private final int b = color(0, 0, 0, 0);
     private PImage img;
     private int underLineLen = 90;
     private int underLineLenButtonRand;
@@ -26,7 +26,6 @@ public class SirenApplication extends PApplet {
     private boolean randCreate = true;
     private int randX = 0;
     private int randY = 0;
-    public int posX, posY;
     @NotNull
     private ArrayList<squareColliders> squareCollidersFill = new ArrayList<>();
     @NotNull
@@ -41,6 +40,7 @@ public class SirenApplication extends PApplet {
     private ArrayList<SpawnBox> spawnBoxes = new ArrayList<>();
     @NotNull
     private ArrayList<SpawnBox> spawnBoxes2 = new ArrayList<>();
+    public int posX, posY;
 
     public static void main(String[] args) {
         PApplet.main("SirenApplication", args);
@@ -637,10 +637,7 @@ public class SirenApplication extends PApplet {
 
     @Contract(pure = true)
     private void update() {
-        /*
-        * createShapeButton("Maze Map", 500, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
-        createShapeButton("Cube Cavern Map", 750, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
-        * */
+        boolean spawnOver2;
         if (mouseOverSpawnSet(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             spawnOver = true;
             squareCreateOver = freedrawOver = saveOver = launchOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;

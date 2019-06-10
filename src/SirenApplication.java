@@ -8,10 +8,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"Duplicates", "SpellCheckingInspection"})
 public class SirenApplication extends PApplet {
-    private int y;
-    private int x;
-    private int randSize;
-    private int yDist1, xDist1, yDist2, xDist2, yDist3, xDist3, yDist4, xDist4, yDist5, xDist5, yDist6, xDist6, yDist7, xDist7;
+    private int y, x, randSize, yDist1, xDist1, yDist2, xDist2, yDist3, xDist3, yDist4, xDist4, yDist5, xDist5, yDist6, xDist6, yDist7, xDist7;
     private boolean circleOver1, circleOver2, circleOver3, circleOver4, circleOver5, circleOver6, circleOver7, circleOver8;
     private boolean click1, click2, click3, click4, click5, click6, click7, click8;
     private float smoothScale1, smoothScale2, smoothScale3, smoothScale4, smoothScale5, smoothScale6, smoothScale7, smoothScale8;
@@ -26,14 +23,24 @@ public class SirenApplication extends PApplet {
     private int underLineLenButtonRand;
     private int underLineLenButtonMan;
     private int scale = 50;
-    public int posX;
-    public int posY;
+    private boolean randCreate = true;
+    private int randX = 0;
+    private int randY = 0;
+    public int posX, posY;
     @NotNull
     private ArrayList<squareColliders> squareCollidersFill = new ArrayList<>();
+    @NotNull
+    private ArrayList<squareColliders> squareCollidersFill2 = new ArrayList<>();
     @NotNull
     private ArrayList<TriangleColliders> triangleCollidersFill = new ArrayList<>();
     @NotNull
     private ArrayList<lineWallCollider> wallMain = new ArrayList<>();
+    @NotNull
+    private ArrayList<lineWallCollider> wallMain2 = new ArrayList<>();
+    @NotNull
+    private ArrayList<SpawnBox> spawnBoxes = new ArrayList<>();
+    @NotNull
+    private ArrayList<SpawnBox> spawnBoxes2 = new ArrayList<>();
 
     public static void main(String[] args) {
         PApplet.main("SirenApplication", args);
@@ -301,7 +308,7 @@ public class SirenApplication extends PApplet {
         }
         if (freedrawSelected) {
             cursor(CROSS);
-        }
+        } else cursor(ARROW);
         if (triangleSelected) {
             stroke(255);
             fill(255);
@@ -310,14 +317,75 @@ public class SirenApplication extends PApplet {
     }
 
     private void randomGenPage() {
+        update();
+
         background(30);
+        int spacing = 20;
         createBackground(taskBarXLoc, taskBarYLoc, taskBarWidth, taskBarHeight);
-        createShapeButton("Back", 200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
-        createShapeButton("Maze Map", 500, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
-        createShapeButton("Cube Cavern Map", 750, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
-        createShapeButton("Set Spawn", 1200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, spawnOver, "Square");
-        createShapeButton("Save", 1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, saveOver);
-        createShapeButton("Launch Game", 1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, launchOver);
+        createShapeButton("Back", 200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver2);
+        createShapeButton("Maze Map", 500, shapeButtonLocY, 200, shapeButtonHeight, mazeOver);
+        createShapeButton("Cube Cavern Map", 900, shapeButtonLocY, 350, shapeButtonHeight, cavernOver);
+        createShapeButton("Save", 1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, saveOver2);
+        createShapeButton("Launch Game", 1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, launchOver2);
+
+        if(mazeSelected){
+            stroke(255);
+            while(randCreate){
+                if(random(1) < 0.70){
+                    wallMain2.add(new lineWallCollider(randX, randX + spacing, randY + 30, randY + spacing + 30, this));
+
+                } else {
+                    wallMain2.add(new lineWallCollider(randX, randX + spacing, randY + spacing + 30, randY + 30, this));
+                }
+                randX += spacing;
+                if(randX > width){
+                    randX = 0;
+                    randY += spacing;
+                }
+                if(randY > height/1.2){
+                    randCreate = false;
+                }
+            }
+        } else if(cavernSelected){
+            stroke(255);
+            while(randCreate){
+                if(random(1) < 0.36){
+                    int X1 = randX - 10;
+                    int X2 = randX + 10;
+                    int X3 = randX - 10;
+                    int X4 = randX + 10;
+                    int Y1 = randY - 10;
+                    int Y2 = randY - 10;
+                    int Y3 = randY + 10;
+                    int Y4 = randY + 10;
+
+                    squareCollidersFill2.add(new squareColliders(randX, randY + 30, 20, this));
+                    wallMain2.add(new lineWallCollider(X1, X2, Y1 + 30, Y2 + 30, this));
+                    wallMain2.add(new lineWallCollider(X1, X3, Y1 + 30, Y3 + 30, this));
+                    wallMain2.add(new lineWallCollider(X2, X4, Y2 + 30, Y4 + 30, this));
+                    wallMain2.add(new lineWallCollider(X3, X4, Y3 + 30, Y4 + 30, this));
+                }
+                randX += spacing;
+                if(randX > width){
+                    randX = 0;
+                    randY += spacing;
+                }
+                if(randY > height/1.2){
+                    randCreate = false;
+                }
+            }
+        }
+
+        if (!(wallMain2.isEmpty())) {
+            for (lineWallCollider lineColliders : wallMain2) {
+                lineColliders.showBoundary();
+            }
+        }
+        if (!(squareCollidersFill2.isEmpty())) {
+            for (squareColliders squareColliders : squareCollidersFill2) {
+                squareColliders.squareFill();
+            }
+        }
     }
 
     private void gamePage(){
@@ -576,21 +644,12 @@ public class SirenApplication extends PApplet {
         if (mouseOverSpawnSet(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             spawnOver = true;
             squareCreateOver = freedrawOver = saveOver = launchOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
-        } else if (mouseOverSpawnSet(1200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
-            spawnOver2 = true;
-            squareCreateOver = freedrawOver = saveOver = launchOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = false;
         } else if (mouseOverLaunch(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             launchOver = true;
             squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
-        }else if (mouseOverLaunch(1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
-            launchOver2 = true;
-            squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = spawnOver2 = false;
         } else if (mouseOverSave(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             saveOver = true;
             squareCreateOver = freedrawOver = launchOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
-        }else if (mouseOverSave(1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
-            saveOver2 = true;
-            squareCreateOver = freedrawOver = launchOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = launchOver2 = spawnOver2 = false;
         } else if (mouseOverFreedraw(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             freedrawOver = true;
             squareCreateOver = launchOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = launchOver2 = saveOver2 = spawnOver2 = false;
@@ -612,12 +671,22 @@ public class SirenApplication extends PApplet {
         } else if (mouseOverTriangle(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
             triangleOver = true;
             launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
-        } else if (mouseOverCavern(750, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
+        } else {
+            squareCreateOver = launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
+        }
+
+        if (mouseOverCavern(900, shapeButtonLocY, 350, shapeButtonHeight)) {
             cavernOver = true;
             launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
-        } else if (mouseOverMaze(500, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
+        } else if (mouseOverMaze(500, shapeButtonLocY, 200, shapeButtonHeight)) {
             mazeOver = true;
             launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = cavernOver = saveOver2 = launchOver2 = spawnOver2 = false;
+        } else if (mouseOverSave(1400, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
+            saveOver2 = true;
+            squareCreateOver = freedrawOver = launchOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = launchOver2 = spawnOver2 = false;
+        } else if (mouseOverLaunch(1600, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
+            launchOver2 = true;
+            squareCreateOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = spawnOver2 = false;
         } else {
             squareCreateOver = launchOver = freedrawOver = saveOver = spawnOver = horizontalOver = verticalOver = diagonalOver1 = diagonalOver2 = triangleOver = cavernOver = mazeOver = saveOver2 = launchOver2 = spawnOver2 = false;
         }
@@ -630,15 +699,12 @@ public class SirenApplication extends PApplet {
         } else if (mouseOverButtonMan(buttonManLocX, buttonManLocY, buttonManDimX, buttonDimY)) {
             manualGenerateOver = true;
             backOver =  backOver2 = randomGenerateOver = false;
-        } else if (mouseOverBack(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)) {
-            backOver = true;
-            backOver2 = manualGenerateOver = randomGenerateOver = false;
-        } else if (mouseOverBack(200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight)){
-            backOver2 = true;
-            backOver = manualGenerateOver = randomGenerateOver = false;
         } else {
-            backOver = backOver2 = manualGenerateOver = randomGenerateOver = false;
+            manualGenerateOver = randomGenerateOver = false;
         }
+
+        backOver2 = mouseOverBack(200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight);
+        backOver = mouseOverBack(shapeButtonLocY, shapeButtonWidth, shapeButtonHeight);
 
         if (mouseOverCircle(randSize, x, y)) {
             circleOver2 = circleOver3 = circleOver4 = circleOver5 = circleOver6 = circleOver7 = circleOver8 = false;
@@ -675,6 +741,9 @@ public class SirenApplication extends PApplet {
 
         if (page == 0 && randomGenerateOver) page = 1;
         else if (page == 0 && manualGenerateOver) page = 2;
+
+        if (page == 1 && launchOver) page = 3;
+        else if (page == 2 && launchOver) page = 4;
 
         if (circleOver1) click1 = true;
         else if (circleOver2) click2 = true;
@@ -838,6 +907,12 @@ public class SirenApplication extends PApplet {
             scale = 50;
         }
         /*else spawnSelected = freedrawSelected = diagonalSelected2 = diagonalSelected1 = verticalSelected = horizontalSelected = squareSelected = false;*/
+
+        if (cavernOver){
+            cavernSelected = !cavernSelected;
+        } else if (mazeOver){
+            mazeSelected = !mazeSelected;
+        }
     }
 
     public void mouseWheel(@NotNull MouseEvent event) {

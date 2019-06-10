@@ -1,32 +1,52 @@
-// TODO
+// TODO (HIGH IMPORTANCE) (Completed All)
 //  - COMPLETE THE CIRCLE BACKGROUND (Completed)
-
 //  - CREATE BUTTON LAYOUT (Completed)
-//  - CREATE BUTTON SLIDER (Optional)
+//  - CREATE BUTTON SLIDER ~~NOT NEEDED
 //  - ADD LOGO (Completed)
-//  - CREATE RANDOM MAP PAGE (In-Progress)
-//      -PREVIEW PAGE?
+//  - CREATE RANDOM MAP PAGE (Completed)
+//      -PREVIEW PAGE? (Completed)
 //      -IMAGE CONVERSION
-//          -LINE-POINT INTERSECTION SYSTEM
-//  - CREATE MANUAL MAP PAGE, SELECTOR (In-Progress)
+//          -LINE-POINT INTERSECTION SYSTEM (Is it even possible?)
+//  - CREATE MANUAL MAP PAGE, SELECTOR (Completed)
 //      -PREVIEW PAGE/MAKER (Completed)
 //      -HORIZONTAL LINE (Completed)
 //      -VERTICAL LINE (Completed)
 //      -SQUARE (Completed)
-//      -TRIANGLE (Optional)
+//      -TRIANGLE (Completed)
 //      -SCALING (Completed)
 //      -CIRCLE (Optional)
 //      -ERASE (Is it even possible?)
-//      -FREE DRAW TOOL
-//          -lINE-POINT INTERSECTION SYSTEM
+//      -FREE DRAW TOOL (Completed)
+//          -lINE-POINT INTERSECTION SYSTEM (Is it even possible?)
 
 
-// TODO
-//  -Get all buttons for manual creation page completed (Completed)
-//      -Back button, square, horizontal line, vertical line, diagonal (optional), triangle (optional), cirlce (optional), freedraw, spawn location, save, launch game (Completed)
+// TODO (HIGH IMPORTANCE)
+//  - Game page (In-Progress)
+//  - Spawn set (In-Progress)
+//  - Game exit, backtrack (Optional)
+//  - Save functionality
+//  - Image processing
+//      - Upload basic maps
+//      - Upload complex images
+//      - Add spawn and LIMITED objects (Already done, just have to implement)
+//      - Save map (Other stage dealing with this)
 
-//  - CREATE BUTTON LAYOUT
-//  - CREATE BUTTON SLIDER
-//  - ADD LOGO
-//  - CREATE RANDOM MAP PAGE
-//  - CREATE GRADIENT SHADOW BOX
+
+// TODO (MEDIUM IMPORTANCE)
+//  - Goal system
+//      - Objectives
+//          - End Points
+//          - Collectables
+//      - Enemies
+//          - Basic AI
+//              - Possibly perlin AI (Randomized)
+//              - Actual path finding
+//      - Randomized Objectives
+//          - Same objectives just placed randomly
+
+
+// TODO (LOW IMPORTANCE)
+//  - Changing render color
+//  - Changing map color
+//  - Mini map
+//  -Texturing

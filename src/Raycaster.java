@@ -4,8 +4,7 @@ import processing.core.PVector;
 public class Raycaster {
     private final PApplet parent;
     private final PVector pos;
-            public PVector dir;
-            public PVector pt;
+    public PVector dir;
 
     public Raycaster(PVector position, float angle, PApplet applet){
                 pos = position;

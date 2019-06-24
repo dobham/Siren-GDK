@@ -40,6 +40,11 @@ public class SirenApplication extends PApplet {
     private ArrayList<SpawnBox> spawnBoxes = new ArrayList<>();
     @NotNull
     private ArrayList<SpawnBox> spawnBoxes2 = new ArrayList<>();
+    @NotNull
+    private ArrayList<Float> scene;
+
+    private PlayerParticle player = new PlayerParticle(this);
+
     public int posX, posY;
 
     public static void main(String[] args) {
@@ -254,7 +259,7 @@ public class SirenApplication extends PApplet {
 
     private void manualGenPage() {
         update();
-
+        noStroke();
         background(30);
         createBackground(taskBarXLoc, taskBarYLoc, taskBarWidth, taskBarHeight);
         createShapeButton("Back", 200, shapeButtonLocY, shapeButtonWidth, shapeButtonHeight, backOver);
@@ -286,12 +291,12 @@ public class SirenApplication extends PApplet {
         }
         if(!(spawnBoxes.isEmpty())){
             for(SpawnBox spawns : spawnBoxes){
+                noStroke();
                 spawns.squareFill();
             }
         }
 
         if (squareSelected) {
-            stroke(255);
             rect(mouseX, mouseY, scale, scale);
         }
         if (spawnSelected) {
@@ -301,19 +306,19 @@ public class SirenApplication extends PApplet {
         if (horizontalSelected) {
             stroke(255);
             line(mouseX - (scale >> 1), mouseY, mouseX + (scale >> 1), mouseY);
-        }
+        } else {noStroke();}
         if (verticalSelected) {
             stroke(255);
             line(mouseX, mouseY + (scale >> 1), mouseX, mouseY - (scale >> 1));
-        }
+        } else {noStroke();}
         if (diagonalSelected1) {
             stroke(255);
             line(mouseX - (scale >> 1), mouseY - (scale >> 1), mouseX + (scale >> 1), mouseY + (scale >> 1));
-        }
+        } else {noStroke();}
         if (diagonalSelected2) {
             stroke(255);
             line(mouseX - (scale >> 1), mouseY + (scale >> 1), mouseX + (scale >> 1), mouseY - (scale >> 1));
-        }
+        } else {noStroke();}
         if (freedrawSelected) {
             cursor(CROSS);
         } else cursor(ARROW);
@@ -321,7 +326,7 @@ public class SirenApplication extends PApplet {
             stroke(255);
             fill(255);
             triangle(mouseX - (scale >> 1), mouseY + (scale >> 1), mouseX, mouseY - (scale >> 1), mouseX + (scale >> 1), mouseY + (scale >> 1));
-        }
+        } else {noStroke();}
     }
 
     private void randomGenPage() {
@@ -401,13 +406,69 @@ public class SirenApplication extends PApplet {
         }
     }
 
-    public void launchPage(){
+    private void launchPage(){
+//        if(posX != 0 && posY != 0){
+//            PlayerParticle player = new PlayerParticle(posX, posY, this);
+//            if ( keyPressed && (key == LEFT)) {
+//                player.playerRotate(-0.01f);
+//            } else if (keyPressed && (key == RIGHT)){
+//                player.playerRotate(0.01f);
+//            } else if (keyPressed && (key == UP)){
+//                player.playerMove(1);
+//            } else if (keyPressed && (key == DOWN)){
+//                player.playerMove(1);
+//            }
+//
+//            background(30);
+//            scene = player.view(wallMain);
+//            final float WIDTH = width*16 / scene.size();
+//            push();
+//            int index = 0;
+//            for (Float scenes : scene){
+//                noStroke();
+//                float sQ = scenes * scenes;
+//                float wSQ = WIDTH * WIDTH;
+//                float b = map(sQ, 0, wSQ, 255, 0);
+//                float h = map(scenes, 0, width, height,0);
+//                fill(b);
+//                rectMode(CENTER);
+//                rect(index * WIDTH + WIDTH/2, height/2, WIDTH + 1, h);
+//            }
+//            pop();
+//        }
+//        else {
 
-    }
+            if (keyPressed && (key == 'a')) {
+                player.playerRotate(-0.01f);
+                System.out.println("LEFT");
+            } else if (keyPressed && (key == 'd')) {
+                System.out.println("RIGHT");
+                player.playerRotate(0.01f);
+            } else if (keyPressed && (key == 'w')) {
+                System.out.println("UP");
+                player.playerMove(1);
+            } else if (keyPressed && (key == 's')) {
+                System.out.println("DOWN");
+                player.playerMove(-1);
+            }
 
-    private void gamePage(){
-        background(30);
-
+            background(30);
+            scene = player.view(wallMain);
+            float WIDTH = width / scene.size();
+            int index = 0;
+            push();
+            for (Float scenes : scene) {
+                noStroke();
+                float sQ = scenes * scenes;
+                float wSQ = width * width;
+                float b = map(sQ, 0, wSQ, 255, 0);
+                float h = map(scenes, 0, width, height, 0);
+                fill(b);
+                rectMode(CENTER);
+                rect((index * WIDTH) + (WIDTH / 2), height / 2, WIDTH + 1, h);
+                if(index != scene.size()){index++;}
+            }
+            pop();
     }
 
     private void createBackground(int xLoc, int yLoc, int width, int height) {
@@ -815,7 +876,12 @@ public class SirenApplication extends PApplet {
             int y2 = mouseY;
             if (y1 > (height - 115)) {
                 horizontalSelected = false;
-            } else wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
+            } else {wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
+                wallMain.add(new lineWallCollider(0, width, 0, 0, this));
+                wallMain.add(new lineWallCollider(width, width, 0, height, this));
+                wallMain.add(new lineWallCollider(width, 0, height, height, this));
+                wallMain.add(new lineWallCollider(0, 0, height, 0, this));
+            }
         }
         if (verticalSelected) {
             int x1 = mouseX;

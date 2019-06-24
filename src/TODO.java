@@ -20,9 +20,12 @@
 //          -lINE-POINT INTERSECTION SYSTEM (Is it even possible?)
 
 
-// TODO (HIGH IMPORTANCE)
-//  - Game page (In-Progress)
-//  - Spawn set (In-Progress)
+// TODO (HIGH IMPORTANCE) Beta 1
+//  - Game page (Completed)
+//  - Spawn set (Completed)
+
+
+// TODO (High-Medium Importance) Beta 2
 //  - Game exit, backtrack (Optional)
 //  - Save functionality
 //  - Image processing
@@ -32,7 +35,7 @@
 //      - Save map (Other stage dealing with this)
 
 
-// TODO (MEDIUM IMPORTANCE)
+// TODO (MEDIUM IMPORTANCE) Beta 3
 //  - Goal system
 //      - Objectives
 //          - End Points
@@ -45,8 +48,14 @@
 //          - Same objectives just placed randomly
 
 
-// TODO (LOW IMPORTANCE)
+// TODO (LOW IMPORTANCE) Beta 4
 //  - Changing render color
 //  - Changing map color
 //  - Mini map
 //  -Texturing
+
+
+//TODO (Release)
+//  -Player options
+//  -Player Objects (Weapons, collectables, inventory, etc)
+//  -Levels

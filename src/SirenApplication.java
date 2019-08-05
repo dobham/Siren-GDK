@@ -460,10 +460,10 @@ public class SirenApplication extends PApplet {
             for (Float scenes : scene) {
                 noStroke();
                 float sQ = scenes * scenes;
-                float wSQ = width * width;
-                float b = map(sQ, 0, wSQ, 255, 0);
+//                float wSQ = width * width;
+//                float b = map(sQ, 0, wSQ, 1000, -255);
                 float h = map(scenes, 0, width, height, 0);
-                fill(b);
+                fill(150,150,150,sQ - sQ/2);
                 rectMode(CENTER);
                 rect((index * WIDTH) + (WIDTH / 2), height / 2, WIDTH + 1, h);
                 if(index != scene.size()){index++;}
@@ -910,15 +910,7 @@ public class SirenApplication extends PApplet {
                 diagonalSelected2 = false;
             } else wallMain.add(new lineWallCollider(x1, x2, y1, y2, this));
         }
-        if (freedrawSelected) {
-            int pos1 = mouseX;
-            int pos2 = mouseY;
-            int pos3 = pmouseX;
-            int pos4 = pmouseY;
-            if (pos2 > (height - 115)) {
-                freedrawSelected = false;
-            } else wallMain.add(new lineWallCollider(pos1, pos3, pos2, pos4, this));
-        }
+
         if (triangleSelected && (mouseButton == LEFT)) {
             int x1 = mouseX - (scale >> 1);
             int x2 = mouseX;
@@ -957,6 +949,7 @@ public class SirenApplication extends PApplet {
                 spawnSelected = false;
             } else {
                 spawnBoxes.add(new SpawnBox(posX, posY, 30, this));
+                player = new PlayerParticle(posX, posY, this);
             }
         }
         if(spawnSelected2){
@@ -1000,6 +993,18 @@ public class SirenApplication extends PApplet {
             cavernSelected = !cavernSelected;
         } else if (mazeOver){
             mazeSelected = !mazeSelected;
+        }
+    }
+
+    public void mouseDragged(){
+        if (freedrawSelected) {
+            int pos1 = mouseX;
+            int pos2 = mouseY;
+            int pos3 = pmouseX;
+            int pos4 = pmouseY;
+            if (pos2 > (height - 115)) {
+                freedrawSelected = false;
+            } else wallMain.add(new lineWallCollider(pos1, pos3, pos2, pos4, this));
         }
     }
 

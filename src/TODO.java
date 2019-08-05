@@ -24,6 +24,7 @@
 //  - Game page (Completed)
 //  - Spawn set (Completed)
 
+//==Halfway into developemnt==
 
 // TODO (High-Medium Importance) Beta 2
 //  - Game exit, backtrack (Optional)
@@ -55,7 +56,10 @@
 //  -Texturing
 
 
-//TODO (Release)
+//TODO (Release) 1.0
 //  -Player options
 //  -Player Objects (Weapons, collectables, inventory, etc)
 //  -Levels
+
+//TODO (Release) 1.1
+//  -UI CREATION

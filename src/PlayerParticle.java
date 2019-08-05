@@ -21,13 +21,14 @@ public class PlayerParticle {
         }
     }
 
-//    public PlayerParticle(int x, int y,PApplet applet){
-//        parent = applet;
-//        pos = new PVector(x,y);
-//        for(int i = -FOV  >> 1; i < FOV >> 1; i++){
-//            rays.add(new Raycaster(pos, PApplet.radians(i), applet));
-//        }
-//    }
+    public PlayerParticle(int x, int y,PApplet applet){
+        parent = applet;
+        pos = new PVector(x,y);
+        for(int i = (-FOV  >> 1); i < (FOV >> 1); i++){
+            rays.add(new Raycaster(pos, PApplet.radians(i), applet));
+            System.out.println(PApplet.radians(i));
+        }
+    }
 
     public void playerRotate(float angle){
         heading += angle;

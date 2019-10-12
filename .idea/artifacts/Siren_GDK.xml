@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Siren GDK">
+    <output-path>$PROJECT_DIR$/out/artifacts/Siren_GDK</output-path>
+    <root id="archive" name="Siren GDK.jar">
+      <element id="file-copy" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/16.0.2/annotations-16.0.2.jar" />
+      <element id="module-output" name="Siren GDK" />
+      <element id="library" level="project" name="core" />
+    </root>
+  </artifact>
+</component>
